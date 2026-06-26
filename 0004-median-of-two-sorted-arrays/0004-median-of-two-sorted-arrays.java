@@ -1,46 +1,62 @@
 class Solution {
-    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
-        // ensures num1 is the smaller array 
-        if (nums1.length > nums2.length) {
-            return findMedianSortedArrays(nums2, nums1);
+    public String longestPalindrome(String s) {
+        // create StringBuilder t to transformed string e.g., abc --> ^#a#b#c#$
+     StringBuilder t = new StringBuilder();
+
+     t.append('^');
+
+     for (int i = 0; i < s.length(); i++) {
+        t.append('#');
+        t.append(s.charAt(i));
+     }
+
+     t.append("#$");
+
+     // convert StringBuilder to String
+     String str = t.toString();
+
+     // create a radius array of palindrome
+     int[] p = new int[str.length()];
+
+     // initilize the center of current rightmost palindrome
+     int center = 0;
+
+     // initialize the right boundary of that palindrome
+     int right = 0;
+
+     // loop to process every position in the transformed string
+     for (int i = 1; i < str.length() - 1; i++) {
+        // add mirror
+        int mirror = 2 * center - i;
+
+        // check i is inside right boundary
+        if (i < right) {
+            p[i] = Math.min(right - i, p[mirror]);
         }
-
-        int m = nums1.length;
-        int n = nums2.length;
-        int low = 0;
-        int high = m;
-        int total = m + n;
-        int totalLeft = (total + 1) / 2;
-
-        while (low <= high) {
-            int i = low + (high - low) / 2;
-            int j = totalLeft - i;
-
-            // handle edge cases where partitioning falls outisde array bound
-            int left1 = (i == 0) ? Integer.MIN_VALUE : nums1[i - 1];
-            int right1 = (i == m) ? Integer.MAX_VALUE : nums1[i];
-
-            int left2 = (j == 0) ? Integer.MIN_VALUE : nums2[j - 1];
-            int right2 = (j == n) ? Integer.MAX_VALUE : nums2[j];
-
-            // valid partition found
-            if (left1 <= right2 && left2 <= right1) {
-                // if total elements count is odd
-                if (total % 2 != 0) {
-                    return Math.max(left1, left2);
-                }
-                // if total elements count is even
-                return (Math.max(left1, left2) + Math.min(right1, right2)) / 2.0;
-            }
-            // too far right in nums1, move left
-            else if (left1 > right2) {
-                high = i - 1;
-            }
-            // too far left in nums1, move right
-            else {
-                low = i + 1;
-            }
+        // if it expand further and move beyond right boundary
+        while (str.charAt(i + p[i] + 1) == str.charAt(i - p[i] - 1)) {
+            p[i]++;
         }
-        return 0.0;
+        // update center and right
+        if (i + p[i] > right) {
+          center = i;
+          right = i + p[i];
+        }
+     }
+
+     // find maxRadius and centerIndex
+     int maxRadius = 0;
+     int centerIndex = 0;
+     for (int i = 0; i < str.length(); i++) {
+        // current radius is larger than max radius
+        if (p[i] > maxRadius) {
+            maxRadius = p[i];
+            centerIndex = i;
+        }
+     }
+    
+    //convert back to the original string
+    int start = (centerIndex - maxRadius) / 2;
+    return s.substring(start, start + maxRadius);
     }
 }
