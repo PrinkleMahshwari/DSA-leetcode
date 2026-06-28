@@ -1,33 +1,35 @@
 class Solution {
     public int maxArea(int[] height) {
-        
-        // two pointers
         int left = 0;
         int right = height.length - 1;
-
-        // store maximum area
         int maxArea = 0;
 
-        // loop until pointers meet
         while (left < right) {
+            // Cache current boundary heights
+            int leftVal = height[left];
+            int rightVal = height[right];
 
-            // calculate width
-            int width = right - left;
-
-            // calculate height (limited by smaller line)
-            int h = Math.min(height[left], height[right]);
-
-            // curren area
-            int area = width * h;
-
-            // update maximum
-            maxArea = Math.max(maxArea, area);
-
-            // move pointer with smaller height
-            if (height[left] < height[right]) {
-                left++; // try to find a bigger left boundary
-            } else {
-                right--; // try to find a bigger right boundary
+            // Condition 1: Left side is smaller
+            if (leftVal < rightVal) {
+                int area = leftVal * (right - left);
+                if (area > maxArea) {
+                    maxArea = area;
+                }
+                // Fast-forward left pointer past any shorter bars
+                while (left < right && height[left] <= leftVal) {
+                    left++;
+                }
+            } 
+            // Condition 2: Right side is smaller or equal
+            else {
+                int area = rightVal * (right - left);
+                if (area > maxArea) {
+                    maxArea = area;
+                }
+                // Fast-forward right pointer past any shorter bars
+                while (left < right && height[right] <= rightVal) {
+                    right--;
+                }
             }
         }
         return maxArea;
