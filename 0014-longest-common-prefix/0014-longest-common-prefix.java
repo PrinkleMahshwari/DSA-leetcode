@@ -1,65 +1,29 @@
 class Solution {
-
-    // Trie Node definition
-    class Node {
-        Node[] childern = new Node[26];
-        boolean isEnd = false;
-    }
-
-    Node root = new Node();
-
-    // insert word into Trie
-    private void insert(String word) {
-        Node node = root;
-
-        for (char c : word.toCharArray()) {
-            int idx = c - 'a';
-
-            if (node.childern[idx] == null) {
-                node.childern[idx] = new Node();
-            }
-            node = node.childern[idx];
-        }
-        node.isEnd = true;
-    }
-
     public String longestCommonPrefix(String[] strs) {
 
-        // build Trie from all string
-        for (String word : strs) {
-            insert(word);
-        }
+        // edge case: empty array
+        if (strs == null || strs.length == 0)
+            return "";
 
-        StringBuilder prefix = new StringBuilder();
-        Node node = root;
+        // take first string as reference
+        String first = strs[0];
 
-        // traverse while only one path exists
-        while (true) {
+        // loop through each character of first string
+        for (int i = 0; i < first.length(); i++) {
 
-            int count = 0;
-            int index = -1;
+            char ch = first.charAt(i);
 
-            // check how many childern exist
-            for (int i = 0; i < 26; i++) {
-                if (node.childern[i] != null) {
-                    count++;
-                    index = i;
-                }
+            // compare with all other strings
+            for (int j = 1; j < strs.length; j++) {
+
+                // if index out of bounds Or mismatch --> stop
+                if (i >= strs[j].length() || strs[j].charAt(i) != ch) 
+                    return first.substring(0, i);
+
             }
-
-            // stop if:
-            // 1. more than one branch OR
-            // 2. end of a word
-            if (count != 1 || node.isEnd) 
-                break;
-
-            // move to the next node
-            node = node.childern[index];
-
-            // append character to result
-            prefix.append((char)(index + 'a'));
         }
 
-        return prefix.toString();
+        // if full first string matches all
+        return first;
     }
 }
