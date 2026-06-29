@@ -1,30 +1,65 @@
 class Solution {
+
+    // Trie Node definition
+    class Node {
+        Node[] childern = new Node[26];
+        boolean isEnd = false;
+    }
+
+    Node root = new Node();
+
+    // insert word into Trie
+    private void insert(String word) {
+        Node node = root;
+
+        for (char c : word.toCharArray()) {
+            int idx = c - 'a';
+
+            if (node.childern[idx] == null) {
+                node.childern[idx] = new Node();
+            }
+            node = node.childern[idx];
+        }
+        node.isEnd = true;
+    }
+
     public String longestCommonPrefix(String[] strs) {
 
-        // take first string as initial prefix
-        String prefix = strs[0];
-
-        // start checking from second starting
-        for (int i = 1; i < strs.length; i++) {
-
-            // current word
-            String word = strs[i];
-
-            // shrink prefix until it matches current word
-            while (!word.startsWith(prefix)) {
-
-                // remove last character from prefix
-                // because it is not matching
-                prefix = prefix.substring(0, prefix.length() - 1);
-
-                // if prefix becomes empty, no common prefix exist
-                if (prefix.isEmpty())
-                    return "";
-
-            }
+        // build Trie from all string
+        for (String word : strs) {
+            insert(word);
         }
 
-        // return final prefix after all matches
-        return prefix;
+        StringBuilder prefix = new StringBuilder();
+        Node node = root;
+
+        // traverse while only one path exists
+        while (true) {
+
+            int count = 0;
+            int index = -1;
+
+            // check how many childern exist
+            for (int i = 0; i < 26; i++) {
+                if (node.childern[i] != null) {
+                    count++;
+                    index = i;
+                }
+            }
+
+            // stop if:
+            // 1. more than one branch OR
+            // 2. end of a word
+            if (count != 1 || node.isEnd) 
+                break;
+
+            // move to the next node
+            node = node.childern[index];
+
+            // append character to result
+            prefix.append((char)(index + 'a'));
+        }
+
+        return prefix.toString();
     }
 }
