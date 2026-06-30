@@ -10,6 +10,10 @@ class Solution {
         // traverse every number to fix the first element of the triplet
         for (int i = 0; i < nums.length - 2; i++) {
 
+            // early termination: if current number is positive, sum can never be zro
+            if (nums[i] > 0)
+                break;
+
             // skip duplicate values for the first element of the triplet
             if (i > 0 && nums[i] == nums[i - 1])
                 continue;
@@ -27,8 +31,8 @@ class Solution {
                 // triplet found
                 if (sum == 0) {
 
-                    // add valid triplet to the result list
-                    result.add(Arrays.asList(nums[i], nums[left], nums[right]));
+                    // add valid triplet to the result list using faster custom list creation
+                    result.add(new ArrayList<>(Arrays.asList(nums[i], nums[left], nums[right])));
 
                     // skip duplicate values for the second
                     while (left < right && nums[left] == nums[left + 1])
