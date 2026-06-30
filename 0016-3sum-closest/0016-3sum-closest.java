@@ -14,6 +14,28 @@ class Solution {
             if (i > 0 && nums[i] == nums[i - 1])
                 continue;
             
+            // micro-optimization: find the smallest possible sum for the current fixed index i
+            int minSum = nums[i] + nums[i + 1] + nums[i + 2];
+
+            // if the smallest possible sum is already larger than target , check closeness and break loop
+            if (minSum > target) {
+                if (Math.abs(minSum - target) < Math.abs(closestSum - target))
+                    closestSum = minSum;
+                
+                break;
+            }
+            
+            // micro-optimization: find the larget possible sum for the current fixed index i
+            int maxSum = nums[i] + nums[nums.length - 2] + nums[nums.length - 1];
+
+            // if the largest possible sum i still smaller than target, check closeness and skip while loop
+            if (maxSum < target) {
+                if (Math.abs(maxSum - target) < Math.abs(closestSum - target))
+                    closestSum = maxSum;
+                
+                continue;
+            }
+            
             // track the remaining two elements using two pointers
             int left = i + 1;
             int right = nums.length - 1;
