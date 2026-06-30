@@ -1,40 +1,39 @@
 class Solution {
     public int numberOfSubstrings(String s) {
         
-        // store the frequency of characters a, b, and c
-        HashMap<Character, Integer> map = new HashMap<>();
+        // store the last seen index of characters a, b, and c
+        int lastA = -1;
+        int lastB = -1;
+        int lastC = -1;
 
         // store final count of substrings
         int result = 0;
 
-        // track the starting point of the sliding window
-        int left = 0;
+        // traverse every character in the string
+        for (int i = 0; i < s.length(); i++) {
 
-        // traverse every character in the string as the end of the window
-        for (int right = 0; right < s.length(); right++) {
+            // get current character
+            char current = s.charAt(i);
 
-            // get current character at the right pointer
-            char current = s.charAt(right);
+            // update the last seen index for the current character
+            if (current == 'a') {
+                lastA = i;
+            }
+            else if (current == 'b') {
+                lastB = i;
+            }
+            else if (current == 'c') {
+                lastC = i;
+            }
 
-            // update frequency map for the current character
-            map.put(current, map.getOrDefault(current, 0) + 1);
+            // check whether all three characters have been seen at least once
+            if (lastA != -1 && lastB != -1 && lastC != -1) {
 
-            // check whether all three characters exist in the map
-            while (map.getOrDefault('a', 0) > 0 && 
-                   map.getOrDefault('b', 0) > 0 && 
-                   map.getOrDefault('c', 0) > 0) {
+                // find the smallest index among the last seen positions
+                int minIndex = Math.min(lastA, Math.min(lastB, lastC));
 
-                // valid substrings can end anywhere from index right to s.length() - 1
-                result += s.length() - right;
-
-                // get character at the left pointer to shrink the window
-                char leftChar = s.charAt(left);
-
-                // decrease its frequency in the map
-                map.put(leftChar, map.get(leftChar) - 1);
-
-                // move the left pointer forward
-                left++;
+                // valid substrings can start anywhere from index 0 up to minIndex
+                result += minIndex + 1;
             }
         }
         
