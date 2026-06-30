@@ -34,17 +34,18 @@ class Solution {
                     // add valid triplet to the result list using faster custom list creation
                     result.add(new ArrayList<>(Arrays.asList(nums[i], nums[left], nums[right])));
 
-                    // skip duplicate values for the second
-                    while (left < right && nums[left] == nums[left + 1])
-                        left++;
-                    
-                    //skip duplicate values for third element
-                    while (left < right && nums[right] == nums[right - 1])
-                        right--;
-                    
                     // move both pointers
                     left++;
                     right--;
+                    
+                    // skip duplicate values for the second
+                    while (left < right && nums[left] == nums[left - 1])
+                        left++;
+                    
+                    //skip duplicate values for third element
+                    while (left < right && nums[right] == nums[right + 1])
+                        right--;
+                    
                 }
                 // sum is too small, move left pointer to increase sum
                 else if (sum < 0) {
