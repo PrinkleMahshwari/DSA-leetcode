@@ -15,7 +15,7 @@ class Solution {
         int[][] dirs = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 
         // Step 1: Mutli-Source BFS
-        // Find the distance to the neares thief for every cell
+        // Find the distance to the nearest thief for every cell
         Queue<int[]> thiefQueue = new ArrayDeque<>();
         int[][] dist = new int[n][n];
 
@@ -52,7 +52,7 @@ class Solution {
         }
 
         // Step 2: Modified Dijkstra (Max-Priority Queue)
-        // each enry in heap: {safeness_so_far, row, col}
+        // each entry in heap: {safeness_so_far, row, col}
         // sorted descending by safeness_so_far to always pick the safest option first
         PriorityQueue<int[]> maxHeap = new PriorityQueue<>((a, b) -> Integer.compare(b[0], a[0]));
 
