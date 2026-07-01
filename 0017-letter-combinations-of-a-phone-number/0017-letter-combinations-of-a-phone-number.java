@@ -17,7 +17,7 @@ class Solution {
     public List<String> letterCombinations(String digits) {
         List<String> result = new ArrayList<>();
 
-        // Gaurd check: if input is empty, return empty list immediately
+        // Guard check: if input is empty, return empty list immediately
         if (digits == null || digits.isEmpty())
             return result;
         
