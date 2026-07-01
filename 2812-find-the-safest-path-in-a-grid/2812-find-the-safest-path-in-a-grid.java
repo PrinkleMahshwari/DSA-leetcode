@@ -1,19 +1,18 @@
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.List;
+import java.util.PriorityQueue;
 import java.util.Queue;
 
 class Solution {
-
-    // Directions for moving up, down , left, right
-    private final int[][] dirs = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
-
     public int maximumSafenessFactor(List<List<Integer>> grid) {
         int n = grid.size();
 
         // Gaurd check: if start or end is a thief, safety is instantly 0
         if (grid.get(0).get(0) == 1 || grid.get(n - 1).get(n - 1) == 1) 
             return 0;
+        
+        int[][] dirs = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 
         // Step 1: Mutli-Source BFS
         // Find the distance to the neares thief for every cell
@@ -52,66 +51,50 @@ class Solution {
             }
         }
 
-        // Step 3 : Binary Search on Answer
-        // Find the maximum targetSafeness that yiedls a "Yes" (True)
+        // Step 2: Modified Dijkstra (Max-Priority Queue)
+        // each enry in heap: {safeness_so_far, row, col}
+        // sorted descending by safeness_so_far to always pick the safest option first
+        PriorityQueue<int[]> maxHeap = new PriorityQueue<>((a, b) -> Integer.compare(b[0], a[0]));
 
-        // max possible safeness is capped by the starting point's distance
-        int low = 0;
-        int high = dist[0][0];
-        int bestSafeness = 0;
-
-        while (low <= high) {
-            int mid = low + (high - low) / 2;
-
-            // if "Yes, safeness >= mid works" --> look for an even better anwer
-            if (canReachEnd(dist, mid, n)) {
-                bestSafeness = mid;
-                low = mid + 1;
-            }
-            // if "No" --> target was too high, restrict search to smaller limits
-            else {
-                high = mid - 1;
-            }
-        }
-        return bestSafeness;
-    }
-
-    // Step 2: The feasibility check (BFS)
-    // can we reach (n-1, n-1) using only cells with safeness >= targetSafeness
-    private boolean canReachEnd(int[][] dist, int targetSafeness, int n) {
-
-        // if start or end cell itself breaks the rule, instantly impossile
-        if (dist[0][0] < targetSafeness || dist[n - 1][n - 1] < targetSafeness) 
-            return false;
+        // track the maximum safeness achieved to reach each node
+        int[][] maxSafenessToNode = new int[n][n];
+        for (int i = 0; i < n; i++)
+            Arrays.fill(maxSafenessToNode[i], -1);
         
-        Queue<int[]> pathQueue = new ArrayDeque<>();
-        boolean[][] visited = new boolean[n][n];
+        // initialize at start cell (0, 0)
+        maxHeap.offer(new int[]{dist[0][0], 0, 0});
+        maxSafenessToNode[0][0] = dist[0][0];
 
-        pathQueue.offer(new int[] {0, 0});
-        visited[0][0]= true;
+        while (!maxHeap.isEmpty()) {
+            int[] curr = maxHeap.poll();
+            int currentSafeness = curr[0];
+            int r = curr[1], c = curr[2];
 
-        while (!pathQueue.isEmpty()) {
-            int[] curr = pathQueue.poll();
-            int r = curr[0];
-            int c = curr[1];
-
-            if (r == n - 1 && c == n - 1) 
-                return true; // Reached the finish line safely
+            // Critical speedup: if we reached the end, this path is guaranteed optimal
+            if (r == n - 1 && c == n - 1)
+                return currentSafeness;
+            
+            // skip if we already found a path to this node with a better safeness factor
+            if (currentSafeness < maxSafenessToNode[r][c])
+                continue;
             
             for (int[] dir : dirs) {
-                int nr = r + dir[0];
-                int nc = c + dir[1];
+                int nr = r + dir[0], nc = c + dir[1];
 
-                if (nr >= 0 && nr < n && nc >= 0 && nc < n && !visited[nr][nc]) {
-                    // ignore cells smaller than targetSafeness (Treat as X)
-                    if (dist[nr][nc] >= targetSafeness) {
-                        visited[nr][nc] = true;
-                        pathQueue.offer(new int[]{nr, nc});
+                if (nr >= 0 && nr < n && nc >= 0 && nc < n) {
+                    // the safeness of the path moving into the neighbor is limited
+                    // by the minimum value seen along the way
+                    int nextSafeness = Math.min(currentSafeness, dist[nr][nc]);
+
+                    // if this new path offers a better safeness factor than previousy recorded
+                    if (nextSafeness > maxSafenessToNode[nr][nc]) {
+                        maxSafenessToNode[nr][nc] = nextSafeness;
+                        maxHeap.offer(new int[]{nextSafeness, nr, nc});
                     }
                 }
             }
         }
-        
-        return false;
+
+        return 0;
     }
 }
