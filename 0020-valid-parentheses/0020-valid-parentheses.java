@@ -1,38 +1,40 @@
 class Solution {
     public boolean isValid(String s) {
+        int n = s.length();
+
+        // an odd-length string can never be balanced
+        if (n % 2 != 0)
+            return false;
         
-        // stack to store opening brackets
-        Stack<Character> stack = new Stack<>();
+        // Primitive array stack instead of java.util.Stack
+        // allocating a fixed primitive array avoids object boxing and synchronization overhead
+        char[] stack = new char[n];
+        int top = 0; // acts as our stack pointer (index where next element goes)
+        
+        for (int i = 0; i < n; i++) {
+            char ch = s.charAt(i);
 
-        for (char ch : s.toCharArray()) {
-
-            // if opening bracket --> push to stack
-            if (ch == '(' || ch == '[' || ch == '{')
-                stack.push(ch);
+            // push the expected closing bracket instead of the opening one
+            // this simplifies the mismatch validation checks down to a single comparison
+            if (ch == '(')
+                stack[top++] = ')';
             
-            // if closing bracket --> check top of stack
+            else if (ch == '[')
+                stack[top++] = ']';
+            
+            else if (ch == '{')
+                stack[top++] = '}';
+            
+            // if it's a closing brakcet:
             else {
-
-                // case 1: stack empty --> no matching opening
-                if (stack.isEmpty())
+                // case 1: stack is empty (top == 0) --> no matching opening bracket
+                // case 2: mismatch --> the popped character doesn't match current closing character
+                if (top == 0 || stack[--top] != ch)
                     return false;
-                
-                char top = stack.pop();
-
-                // case 2: mismatch check
-                if (ch == ')' && top != '(')
-                    return false;
-                
-                if (ch == ']' && top != '[')
-                    return false;
-                
-                if (ch == '}' && top != '{')
-                    return false;
-                
             }
         }
 
-        // case 3: stack must be empty at the end
-        return stack.isEmpty();
+        // case 3: The stack pointer must return to 0 if all brackets were perfectly matched
+        return top == 0;
     }
 }
