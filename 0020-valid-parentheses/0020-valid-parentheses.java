@@ -25,7 +25,7 @@ class Solution {
             else if (ch == '{')
                 stack[top++] = '}';
             
-            // if it's a closing brakcet:
+            // if it's a closing bracket:
             else {
                 // case 1: stack is empty (top == 0) --> no matching opening bracket
                 // case 2: mismatch --> the popped character doesn't match current closing character
