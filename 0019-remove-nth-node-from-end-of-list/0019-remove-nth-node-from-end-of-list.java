@@ -10,32 +10,28 @@
  */
 class Solution {
     public ListNode removeNthFromEnd(ListNode head, int n) {
-        
-        // Two-Pointer technique (Fast & Slow) with a Dummy node
-        // locate the node right before the target node in a single pass
-        // by advancing a 'fast' pointer N steps ahead, the gap between 'fast' and 'slow' will be sitting perfectly behind the node we need to delete
 
+        // dummy node handles edge case (deleting head)
         ListNode dummy = new ListNode(0);
         dummy.next = head;
 
         ListNode fast = dummy;
         ListNode slow = dummy;
 
-        // step 1: advance the 'fast' pointer N steps forward to build the gap
-        for (int i = 0; i <= n; i++)
+        // move fast n+1 steps ahead to maintain proper gap
+        for (int i = 0; i <= n; i++) {
             fast = fast.next;
-        
-        // step 2: move the both pointers simultaneously at the same speed maintain the gap untill 'fast' drops off the end of the list
+        }
+
+        // move both pointers
         while (fast != null) {
             fast = fast.next;
             slow = slow.next;
         }
 
-        // step 3: delete the Nth node from the end
-        // skip over the target node by re-linking the next pointer
+        // safe deletion
         slow.next = slow.next.next;
 
-        // return the actual head of the modified list
         return dummy.next;
     }
 }
