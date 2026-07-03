@@ -54,6 +54,8 @@ class Solution {
         }
 
         int topoIdx = 0;
+        int targetTopoLimit = n; // Optimization: Find where node n-1 sits to prune DP loops completely
+
         while (headPtr < tailPtr) {
             int node = queue[headPtr++];
             topo[topoIdx++] = node;
@@ -63,6 +65,14 @@ class Solution {
                 if (--indegree[neighbor] == 0) {
                     queue[tailPtr++] = neighbor;
                 }
+            }
+        }
+
+        // Optimization: Track the exact index of n-1 in topo to safely skip downstream nodes
+        for (int i = 0; i < n; i++) {
+            if (topo[i] == n - 1) {
+                targetTopoLimit = i;
+                break;
             }
         }
 
@@ -80,7 +90,7 @@ class Solution {
             int candidateScore = uniqueCosts[mid];
 
             // Verify if a valid path exists with minimum edge cost >= candidateScore
-            if (canReach(candidateScore, head, next, to, cost, topo, online, k, n, dp)) {
+            if (canReach(candidateScore, head, next, to, cost, topo, targetTopoLimit, online, k, n, dp)) {
                 answer = candidateScore;
                 left = mid + 1; // Try to maximize the bottleneck cost
             } else {
@@ -99,6 +109,7 @@ class Solution {
         int[] to,
         int[] cost,
         int[] topo,
+        int targetTopoLimit,
         boolean[] online,
         long k,
         int n,
@@ -109,8 +120,8 @@ class Solution {
         Arrays.fill(dp, INF);
         dp[0] = 0;
 
-        // Process every node exactly once in topological order
-        for (int i = 0; i < n; i++) {
+        // Optimization: Loop only runs up to targetTopoLimit because elements after n-1 in a DAG can't reach it
+        for (int i = 0; i <= targetTopoLimit; i++) {
             int u = topo[i];
 
             if (dp[u] == INF) {
