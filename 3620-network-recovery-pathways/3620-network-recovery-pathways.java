@@ -32,9 +32,24 @@ class Solution {
             uniqueCosts[i] = c;
         }
 
+        // Optimization: Blazing Fast 16-bit Radix Sort instead of Arrays.sort()
+        // Sorts edge costs in O(M) time, eliminating the O(M log M) quicksort overhead.
+        int[] tempCosts = new int[m];
+        int[] count = new int[65536];
+
+        // Pass 1: Lower 16 bits
+        for (int i = 0; i < m; i++) count[uniqueCosts[i] & 0xFFFF]++;
+        for (int i = 1; i < 65536; i++) count[i] += count[i - 1];
+        for (int i = m - 1; i >= 0; i--) tempCosts[--count[uniqueCosts[i] & 0xFFFF]] = uniqueCosts[i];
+
+        // Pass 2: Upper 16 bits
+        Arrays.fill(count, 0);
+        for (int i = 0; i < m; i++) count[(tempCosts[i] >>> 16) & 0xFFFF]++;
+        for (int i = 1; i < 65536; i++) count[i] += count[i - 1];
+        for (int i = m - 1; i >= 0; i--) uniqueCosts[--count[(tempCosts[i] >>> 16) & 0xFFFF]] = tempCosts[i];
+
         // Optimization: High-Speed Deduplication Without TreeSet
-        // Sorting and tracking unique costs via pointer adjustments is much faster.
-        Arrays.sort(uniqueCosts);
+        // Tracking unique costs via pointer adjustments is much faster.
         int uniqueCount = 0;
         for (int i = 0; i < m; i++) {
             if (i == 0 || uniqueCosts[i] != uniqueCosts[i - 1]) {
@@ -76,9 +91,11 @@ class Solution {
             }
         }
 
-        // Optimization: Single Memory Allocation for DP State
-        // Pre-allocating the DP array here saves allocation overhead inside the loop.
+        // Optimization: Single Memory Allocation for DP State & Reset Tracking array
         long[] dp = new long[n];
+        long INF = 1L << 60;
+        Arrays.fill(dp, INF); 
+        int[] resetQueue = new int[n];
 
         // Step 2: Binary search on answer
         int left = 0;
@@ -90,7 +107,7 @@ class Solution {
             int candidateScore = uniqueCosts[mid];
 
             // Verify if a valid path exists with minimum edge cost >= candidateScore
-            if (canReach(candidateScore, head, next, to, cost, topo, targetTopoLimit, online, k, n, dp)) {
+            if (canReach(candidateScore, head, next, to, cost, topo, targetTopoLimit, online, k, n, dp, resetQueue, INF)) {
                 answer = candidateScore;
                 left = mid + 1; // Try to maximize the bottleneck cost
             } else {
@@ -113,18 +130,21 @@ class Solution {
         boolean[] online,
         long k,
         int n,
-        long[] dp) {
+        long[] dp,
+        int[] resetQueue,
+        long INF) {
 
-        // Using a highly large boundary value instead of Long.MAX_VALUE to prevent potential overflow
-        long INF = 1L << 60;
-        Arrays.fill(dp, INF);
+        // Optimization: Track and reset ONLY modified nodes from the previous round instead of O(N) Arrays.fill
+        int resetCount = 0;
         dp[0] = 0;
+        resetQueue[resetCount++] = 0;
 
         // Optimization: Loop only runs up to targetTopoLimit because elements after n-1 in a DAG can't reach it
         for (int i = 0; i <= targetTopoLimit; i++) {
             int u = topo[i];
+            long dpU = dp[u];
 
-            if (dp[u] == INF) {
+            if (dpU == INF) {
                 continue;
             }
                 
@@ -144,14 +164,23 @@ class Solution {
                 }
                     
                 // Fast path relaxation state change
-                long nextCost = dp[u] + edgeCost;
+                long nextCost = dpU + edgeCost;
                 if (nextCost < dp[v]) {
+                    if (dp[v] == INF) {
+                        resetQueue[resetCount++] = v; // Log index to safely clean up later
+                    }
                     dp[v] = nextCost;
                 }
             }
         }
 
-        // Valid path exists only if the total accumulation stays within budget constraints
-        return dp[n - 1] <= k;
+        boolean result = dp[n - 1] <= k;
+
+        // Clean up memory state only for visited indexes to protect the next binary search iteration
+        for (int i = 0; i < resetCount; i++) {
+            dp[resetQueue[i]] = INF;
+        }
+
+        return result;
     }
 }
