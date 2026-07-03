@@ -32,24 +32,8 @@ class Solution {
             uniqueCosts[i] = c;
         }
 
-        // Optimization: Blazing Fast 16-bit Radix Sort instead of Arrays.sort()
-        // Sorts edge costs in O(M) time, eliminating the O(M log M) quicksort overhead.
-        int[] tempCosts = new int[m];
-        int[] count = new int[65536];
-
-        // Pass 1: Lower 16 bits
-        for (int i = 0; i < m; i++) count[uniqueCosts[i] & 0xFFFF]++;
-        for (int i = 1; i < 65536; i++) count[i] += count[i - 1];
-        for (int i = m - 1; i >= 0; i--) tempCosts[--count[uniqueCosts[i] & 0xFFFF]] = uniqueCosts[i];
-
-        // Pass 2: Upper 16 bits
-        Arrays.fill(count, 0);
-        for (int i = 0; i < m; i++) count[(tempCosts[i] >>> 16) & 0xFFFF]++;
-        for (int i = 1; i < 65536; i++) count[i] += count[i - 1];
-        for (int i = m - 1; i >= 0; i--) uniqueCosts[--count[(tempCosts[i] >>> 16) & 0xFFFF]] = tempCosts[i];
-
-        // Optimization: High-Speed Deduplication Without TreeSet
-        // Tracking unique costs via pointer adjustments is much faster.
+        // Optimization: Rely on high-performance native JVM sorting
+        Arrays.sort(uniqueCosts);
         int uniqueCount = 0;
         for (int i = 0; i < m; i++) {
             if (i == 0 || uniqueCosts[i] != uniqueCosts[i - 1]) {
@@ -71,8 +55,12 @@ class Solution {
         int topoIdx = 0;
         int targetTopoLimit = n; // Optimization: Find where node n-1 sits to prune DP loops completely
 
+        // Track the topological index for each node for instant O(1) lookups
+        int[] nodeToTopoIdx = new int[n];
+
         while (headPtr < tailPtr) {
             int node = queue[headPtr++];
+            nodeToTopoIdx[node] = topoIdx;
             topo[topoIdx++] = node;
 
             for (int e = head[node]; e != -1; e = next[e]) {
@@ -84,18 +72,11 @@ class Solution {
         }
 
         // Optimization: Track the exact index of n-1 in topo to safely skip downstream nodes
-        for (int i = 0; i < n; i++) {
-            if (topo[i] == n - 1) {
-                targetTopoLimit = i;
-                break;
-            }
-        }
+        targetTopoLimit = nodeToTopoIdx[n - 1];
 
-        // Optimization: Single Memory Allocation for DP State & Reset Tracking array
+        // Optimization: Single Memory Allocation for DP State
+        // Pre-allocating the DP array here saves allocation overhead inside the loop.
         long[] dp = new long[n];
-        long INF = 1L << 60;
-        Arrays.fill(dp, INF); 
-        int[] resetQueue = new int[n];
 
         // Step 2: Binary search on answer
         int left = 0;
@@ -107,7 +88,7 @@ class Solution {
             int candidateScore = uniqueCosts[mid];
 
             // Verify if a valid path exists with minimum edge cost >= candidateScore
-            if (canReach(candidateScore, head, next, to, cost, topo, targetTopoLimit, online, k, n, dp, resetQueue, INF)) {
+            if (canReach(candidateScore, head, next, to, cost, topo, targetTopoLimit, nodeToTopoIdx, online, k, n, dp)) {
                 answer = candidateScore;
                 left = mid + 1; // Try to maximize the bottleneck cost
             } else {
@@ -127,20 +108,27 @@ class Solution {
         int[] cost,
         int[] topo,
         int targetTopoLimit,
+        int[] nodeToTopoIdx,
         boolean[] online,
         long k,
         int n,
-        long[] dp,
-        int[] resetQueue,
-        long INF) {
+        long[] dp) {
 
-        // Optimization: Track and reset ONLY modified nodes from the previous round instead of O(N) Arrays.fill
-        int resetCount = 0;
+        // Using a highly large boundary value instead of Long.MAX_VALUE to prevent potential overflow
+        long INF = 1L << 60;
+        Arrays.fill(dp, INF);
         dp[0] = 0;
-        resetQueue[resetCount++] = 0;
 
-        // Optimization: Loop only runs up to targetTopoLimit because elements after n-1 in a DAG can't reach it
+        // Optimization: Track the maximum topological index currently reached to prune unreachable nodes early
+        int maxVisitedTopoIdx = 0;
+
+        // Process every node exactly once in topological order up to targetTopoLimit
         for (int i = 0; i <= targetTopoLimit; i++) {
+            // If the loop pointer passes the maximum reachable topological index, we can safely terminate early
+            if (i > maxVisitedTopoIdx) {
+                break;
+            }
+
             int u = topo[i];
             long dpU = dp[u];
 
@@ -166,21 +154,18 @@ class Solution {
                 // Fast path relaxation state change
                 long nextCost = dpU + edgeCost;
                 if (nextCost < dp[v]) {
-                    if (dp[v] == INF) {
-                        resetQueue[resetCount++] = v; // Log index to safely clean up later
-                    }
                     dp[v] = nextCost;
+                    
+                    // Optimization: Dynamically expand the reachable topological search horizon
+                    int vTopoIdx = nodeToTopoIdx[v];
+                    if (vTopoIdx > maxVisitedTopoIdx) {
+                        maxVisitedTopoIdx = vTopoIdx;
+                    }
                 }
             }
         }
 
-        boolean result = dp[n - 1] <= k;
-
-        // Clean up memory state only for visited indexes to protect the next binary search iteration
-        for (int i = 0; i < resetCount; i++) {
-            dp[resetQueue[i]] = INF;
-        }
-
-        return result;
+        // Valid path exists only if the total accumulation stays within budget constraints
+        return dp[n - 1] <= k;
     }
 }
