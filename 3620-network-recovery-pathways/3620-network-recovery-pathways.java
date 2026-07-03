@@ -2,141 +2,145 @@ import java.util.*;
 
 class Solution {
 
-    // edge representation for adjency list
-    static class Edge {
-        int to;
-        int cost;
-        
-        Edge(int to, int cost) {
-            this.to = to;
-            this.cost = cost;
-        }
-    }
     public int findMaxPathScore(int[][] edges, boolean[] online, long k) {
-        
         int n = online.length;
+        int m = edges.length;
 
-        // build adjency list and indegree array simultaneously 
-        List<List<Edge>> graph = new ArrayList<>();
-        for (int i = 0; i < n; i++) 
-            graph.add(new ArrayList<>());
-        
+        // Optimization: Forward Star Adjacency List Structure using Primitive Arrays 
+        // Eliminates List<List<Object>> allocation and reduces cache misses drastically.
+        int[] head = new int[n];
+        Arrays.fill(head, -1);
+        int[] next = new int[m];
+        int[] to = new int[m];
+        int[] cost = new int[m];
         int[] indegree = new int[n];
 
-        // collect distinct edge costs for binary search
-        TreeSet<Integer> uniqueCosts = new TreeSet<>();
+        // Collect distinct edge costs for binary search
+        int[] uniqueCosts = new int[m];
 
-        for (int[] edge : edges) {
-            int u = edge[0];
-            int v = edge[1];
-            int cost = edge[2];
-            
-            graph.get(u).add(new Edge(v, cost));
+        for (int i = 0; i < m; i++) {
+            int u = edges[i][0];
+            int v = edges[i][1];
+            int c = edges[i][2];
+
+            to[i] = v;
+            cost[i] = c;
+            next[i] = head[u];
+            head[u] = i;
+
             indegree[v]++;
-
-            uniqueCosts.add(cost);
+            uniqueCosts[i] = c;
         }
 
-        // Step 1: compute topological order once
-        // since the graph is a DAG, this ordering remains valid for every binary search iteration
-        List<Integer> topo = new ArrayList<>();
-        Queue<Integer> queue = new ArrayDeque<>();
-
-        for (int i = 0; i < n; i++) {
-            if (indegree[i] == 0)
-                queue.offer(i);   
-        }
-
-        while (!queue.isEmpty()) {
-            int node = queue.poll();
-            topo.add(node);
-
-            for (Edge edge : graph.get(node)) {
-                if (--indegree[edge.to] == 0)
-                    queue.offer(edge.to);
+        // Optimization: High-Speed Deduplication Without TreeSet
+        // Sorting and tracking unique costs via pointer adjustments is much faster.
+        Arrays.sort(uniqueCosts);
+        int uniqueCount = 0;
+        for (int i = 0; i < m; i++) {
+            if (i == 0 || uniqueCosts[i] != uniqueCosts[i - 1]) {
+                uniqueCosts[uniqueCount++] = uniqueCosts[i];
             }
         }
 
-        // convert sorted distinct edge costs into oan rray
-        int[] costs = new int[uniqueCosts.size()];
-        int index = 0;
+        // Optimization: Stack/Array-Based Fast Topological Sort Queue 
+        int[] topo = new int[n];
+        int[] queue = new int[n];
+        int headPtr = 0, tailPtr = 0;
 
-        for (int cost : uniqueCosts)
-            costs[index++] = cost;
-        
-        // step 2: Binary search on answer
-        //  search only over distinct edge costs because the answer must be equal
-        // the cost of some edge present in the graph
+        for (int i = 0; i < n; i++) {
+            if (indegree[i] == 0) {
+                queue[tailPtr++] = i;
+            }
+        }
+
+        int topoIdx = 0;
+        while (headPtr < tailPtr) {
+            int node = queue[headPtr++];
+            topo[topoIdx++] = node;
+
+            for (int e = head[node]; e != -1; e = next[e]) {
+                int neighbor = to[e];
+                if (--indegree[neighbor] == 0) {
+                    queue[tailPtr++] = neighbor;
+                }
+            }
+        }
+
+        // Optimization: Single Memory Allocation for DP State
+        // Pre-allocating the DP array here saves allocation overhead inside the loop.
+        long[] dp = new long[n];
+
+        // Step 2: Binary search on answer
         int left = 0;
-        int right = costs.length - 1;
-
+        int right = uniqueCount - 1;
         int answer = -1;
 
         while (left <= right) {
-
             int mid = left + (right - left) / 2;
-            int candidateScore = costs[mid];
+            int candidateScore = uniqueCosts[mid];
 
-            // if a valid path exists with minimum edge cost >= candidateScore
-            if (canReach(candidateScore, graph, topo, online, k, n)) {
+            // Verify if a valid path exists with minimum edge cost >= candidateScore
+            if (canReach(candidateScore, head, next, to, cost, topo, online, k, n, dp)) {
                 answer = candidateScore;
-                left = mid + 1;
-            }
-
-            // candidate score is too large
-            else {
-                right = mid - 1;
+                left = mid + 1; // Try to maximize the bottleneck cost
+            } else {
+                right = mid - 1; // Candidate score is too large
             }
         }
 
         return answer;
     }
 
-    // DP over Topological Ordering
-    // determine whether a path exists whose:
-    //    every edge has cost >= minimumEdgeCost
-    //    all intermediate nodes are online
-    //    total recovery cost <= k
+    // DP over Topological Ordering using primitive forward-star graph parameters
     private boolean canReach(
         int minimumEdgeCost,
-        List<List<Edge>> graph,
-        List<Integer> topo,
+        int[] head,
+        int[] next,
+        int[] to,
+        int[] cost,
+        int[] topo,
         boolean[] online,
         long k,
-        int n) {
+        int n,
+        long[] dp) {
 
-        Long INF = Long.MAX_VALUE;
-
-        // dp[i] stores the minimum total recovery cost required to reach node i under the current binary search constraint
-        long[] dp = new long[n];
+        // Using a highly large boundary value instead of Long.MAX_VALUE to prevent potential overflow
+        long INF = 1L << 60;
         Arrays.fill(dp, INF);
-
         dp[0] = 0;
 
-        // process every node exactly once in topological order
-        for (int u : topo) {
+        // Process every node exactly once in topological order
+        for (int i = 0; i < n; i++) {
+            int u = topo[i];
 
-            if (dp[u] == INF)
+            if (dp[u] == INF) {
                 continue;
+            }
                 
-            for (Edge edge : graph.get(u)) {
+            // Fast linear iteration over primitive edges
+            for (int e = head[u]; e != -1; e = next[e]) {
+                int v = to[e];
+                int edgeCost = cost[e];
 
-                int v = edge.to;
-
-                // ignore edges that violate teh current bottleneck requirement
-                if (edge.cost < minimumEdgeCost)
+                // Ignore edges violating the bottleneck constraint
+                if (edgeCost < minimumEdgeCost) {
                     continue;
+                }
                     
-                // intermediate nodes must be online
-                if (v != n - 1 && !online[v])
+                // Intermediate nodes must be online
+                if (v != n - 1 && !online[v]) {
                     continue;
+                }
                     
-                // relax shortest path in DAG
-                dp[v] = Math.min(dp[v], dp[u] + edge.cost);
+                // Fast path relaxation state change
+                long nextCost = dp[u] + edgeCost;
+                if (nextCost < dp[v]) {
+                    dp[v] = nextCost;
+                }
             }
         }
 
-        // valid path exists only if total recovery cost stays within budget
-        return dp[ n - 1] <= k;
+        // Valid path exists only if the total accumulation stays within budget constraints
+        return dp[n - 1] <= k;
     }
 }
