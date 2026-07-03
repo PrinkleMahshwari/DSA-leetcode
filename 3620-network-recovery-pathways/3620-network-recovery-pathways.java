@@ -2,6 +2,9 @@ import java.util.*;
 
 class Solution {
 
+    // instance field instead of int[1] wrapper, avoids extra array allocation
+    private int versionCounter = 0;
+
     public int findMaxPathScore(int[][] edges, boolean[] online, long k) {
         int n = online.length;
         int m = edges.length;
@@ -27,7 +30,7 @@ class Solution {
             indegree[v]++;
         }
 
-        // sort a clone for binary search candidates, dedupe in place
+        // sort clone for binary search candidates, dedupe in place
         int[] uniqueCosts = cost.clone();
         Arrays.sort(uniqueCosts);
         int uniqueCount = 0;
@@ -68,9 +71,7 @@ class Solution {
 
         // single dp allocation reused across all binary search calls
         long[] dp = new long[n];
-        // version stamp array, avoids Arrays.fill(dp, INF) every iteration
         int[] dpVersion = new int[n];
-        int[] versionHolder = new int[1]; // mutable counter passed by reference
 
         int left = 0;
         int right = uniqueCount - 1;
@@ -81,7 +82,7 @@ class Solution {
             int candidateScore = uniqueCosts[mid];
 
             if (canReach(candidateScore, head, next, to, cost, topo, targetTopoLimit,
-                    nodeToTopoIdx, online, k, n, dp, dpVersion, versionHolder)) {
+                    nodeToTopoIdx, online, k, n, dp, dpVersion)) {
                 answer = candidateScore;
                 left = mid + 1;
             } else {
@@ -105,12 +106,10 @@ class Solution {
         long k,
         int n,
         long[] dp,
-        int[] dpVersion,
-        int[] versionHolder) {
+        int[] dpVersion) {
 
-        long INF = 1L << 60;
         // bump version instead of memset, stale dp[v] entries auto-invalidate
-        int curVersion = ++versionHolder[0];
+        int curVersion = ++versionCounter;
 
         dp[0] = 0;
         dpVersion[0] = curVersion;
@@ -119,36 +118,35 @@ class Solution {
 
         for (int i = 0; i <= targetTopoLimit; i++) {
             if (i > maxVisitedTopoIdx) {
-                break;
+                break; // nothing beyond this index has been reached, stop early
             }
 
             int u = topo[i];
             if (dpVersion[u] != curVersion) {
-                continue; // never reached this iteration, skip like it was INF
+                continue; // unreached this round, treat as INF
             }
             long dpU = dp[u];
 
+            // cache head[u] once, walk the edge list
             for (int e = head[u]; e != -1; e = next[e]) {
-                int v = to[e];
                 int edgeCost = cost[e];
-
                 if (edgeCost < minimumEdgeCost) {
-                    continue;
+                    continue; // bottleneck constraint violated
                 }
 
+                int v = to[e];
                 if (v != n - 1 && !online[v]) {
-                    continue;
+                    continue; // intermediate node must be online
                 }
 
                 long nextCost = dpU + edgeCost;
-                // treat unstamped dp[v] as INF automatically
                 if (dpVersion[v] != curVersion || nextCost < dp[v]) {
                     dp[v] = nextCost;
                     dpVersion[v] = curVersion;
 
                     int vTopoIdx = nodeToTopoIdx[v];
                     if (vTopoIdx > maxVisitedTopoIdx) {
-                        maxVisitedTopoIdx = vTopoIdx;
+                        maxVisitedTopoIdx = vTopoIdx; // expand search horizon
                     }
                 }
             }
