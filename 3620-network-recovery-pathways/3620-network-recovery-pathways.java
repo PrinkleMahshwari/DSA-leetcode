@@ -2,11 +2,15 @@ import java.util.*;
 
 class Solution {
 
+    // instance field replaces int[1] wrapper array, one less heap allocation per call
+    private int versionCounter = 0;
+
     public int findMaxPathScore(int[][] edges, boolean[] online, long k) {
         int n = online.length;
         int m = edges.length;
 
-        // forward star adjacency list, avoids List<List<>> allocation
+        // forward star adjacency list: three parallel arrays instead of List<List<>>
+        // avoids boxing and gives sequential memory access during traversal
         int[] head = new int[n];
         Arrays.fill(head, -1);
         int[] next = new int[m];
@@ -27,7 +31,7 @@ class Solution {
             indegree[v]++;
         }
 
-        // sort a clone for binary search candidates, dedupe in place
+        // clone costs for sorting so original edge order stays intact for the adjacency list
         int[] uniqueCosts = cost.clone();
         Arrays.sort(uniqueCosts);
         int uniqueCount = 0;
@@ -37,7 +41,7 @@ class Solution {
             }
         }
 
-        // array based topo sort, no queue object overhead
+        // Kahn's algorithm using plain int arrays as the queue, no ArrayDeque object overhead
         int[] topo = new int[n];
         int[] queue = new int[n];
         int headPtr = 0, tailPtr = 0;
@@ -56,21 +60,21 @@ class Solution {
             nodeToTopoIdx[node] = topoIdx;
             topo[topoIdx++] = node;
 
-            for (int e = head[node]; e != -1; e = next[e]) {
-                int neighbor = to[e];
+            for (int edge = head[node]; edge != -1; edge = next[edge]) {
+                int neighbor = to[edge];
                 if (--indegree[neighbor] == 0) {
                     queue[tailPtr++] = neighbor;
                 }
             }
         }
 
+        // node n-1 is the only target we care about, no need to process topo order past it
         int targetTopoLimit = nodeToTopoIdx[n - 1];
 
-        // single dp allocation reused across all binary search calls
+        // dp and dpVersion are allocated once and reused across every binary search call,
+        // instead of allocating a fresh long[] each time canReach() runs
         long[] dp = new long[n];
-        // version stamp array, avoids Arrays.fill(dp, INF) every iteration
         int[] dpVersion = new int[n];
-        int[] versionHolder = new int[1]; // mutable counter passed by reference
 
         int left = 0;
         int right = uniqueCount - 1;
@@ -81,11 +85,11 @@ class Solution {
             int candidateScore = uniqueCosts[mid];
 
             if (canReach(candidateScore, head, next, to, cost, topo, targetTopoLimit,
-                    nodeToTopoIdx, online, k, n, dp, dpVersion, versionHolder)) {
+                    nodeToTopoIdx, online, k, n, dp, dpVersion)) {
                 answer = candidateScore;
-                left = mid + 1;
+                left = mid + 1; // this bottleneck works, try a stricter (higher) one
             } else {
-                right = mid - 1;
+                right = mid - 1; // too strict, relax the bottleneck
             }
         }
 
@@ -105,50 +109,53 @@ class Solution {
         long k,
         int n,
         long[] dp,
-        int[] dpVersion,
-        int[] versionHolder) {
+        int[] dpVersion) {
 
-        long INF = 1L << 60;
-        // bump version instead of memset, stale dp[v] entries auto-invalidate
-        int curVersion = ++versionHolder[0];
+        // Version stamping instead of Arrays.fill(dp, INF):
+        // Arrays.fill is O(n) and runs on every one of the ~log(m) binary search calls,
+        // even though only a handful of nodes actually get touched each round.
+        // Bumping a version counter and stamping dpVersion[node] = curVersion on write
+        // makes "is this dp value valid right now" an O(1) check instead of a reset pass.
+        int curVersion = ++versionCounter;
 
         dp[0] = 0;
         dpVersion[0] = curVersion;
 
+        // tracks the furthest topo index touched so far, lets us break out of the loop
+        // as soon as there's nothing left reachable, instead of scanning to targetTopoLimit
         int maxVisitedTopoIdx = 0;
 
         for (int i = 0; i <= targetTopoLimit; i++) {
             if (i > maxVisitedTopoIdx) {
-                break;
+                break; // everything beyond this point is unreachable this round
             }
 
             int u = topo[i];
             if (dpVersion[u] != curVersion) {
-                continue; // never reached this iteration, skip like it was INF
+                continue; // stale stamp means this node was never reached, treat as INF
             }
-            long dpU = dp[u];
+            long currentCost = dp[u];
 
-            for (int e = head[u]; e != -1; e = next[e]) {
-                int v = to[e];
-                int edgeCost = cost[e];
-
+            for (int edge = head[u]; edge != -1; edge = next[edge]) {
+                int edgeCost = cost[edge];
                 if (edgeCost < minimumEdgeCost) {
-                    continue;
+                    continue; // check cost before touching "to[]" to skip a wasted array read
                 }
 
+                int v = to[edge];
                 if (v != n - 1 && !online[v]) {
-                    continue;
+                    continue; // intermediate nodes must be online, final node is exempt
                 }
 
-                long nextCost = dpU + edgeCost;
-                // treat unstamped dp[v] as INF automatically
+                long nextCost = currentCost + edgeCost;
+                // dpVersion[v] != curVersion means dp[v] is stale, treat it as INF automatically
                 if (dpVersion[v] != curVersion || nextCost < dp[v]) {
                     dp[v] = nextCost;
                     dpVersion[v] = curVersion;
 
                     int vTopoIdx = nodeToTopoIdx[v];
                     if (vTopoIdx > maxVisitedTopoIdx) {
-                        maxVisitedTopoIdx = vTopoIdx;
+                        maxVisitedTopoIdx = vTopoIdx; // expand the search horizon
                     }
                 }
             }
