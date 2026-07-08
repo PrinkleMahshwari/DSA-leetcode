@@ -7,89 +7,62 @@ class Solution {
 
         int n = s.length();
         int q = queries.length;
-
-        // convert once to char array, avoids repeated charAt() into the String object
         char[] chars = s.toCharArray();
 
-        // posToCompressed[i] = compressed index of the digit at position i if it's
-        // non-zero, otherwise -1. built directly with primitive arrays, no
-        // ArrayList<Integer> boxing/unboxing overhead for up to n elements
-        int[] posToCompressed = new int[n];
+        // count non-zero digits first; this avoids ever allocating separate
+        // digits[]/positions[] scratch arrays like the earlier version did --
+        // everything below is built directly off chars[]
         int compressedLength = 0;
-
         for (int i = 0; i < n; i++) {
-            int digit = chars[i] - '0';
-            if (digit != 0) {
-                posToCompressed[i] = compressedLength;
-                compressedLength++;
-            } else {
-                posToCompressed[i] = -1;
-            }
+            if (chars[i] != '0') compressedLength++;
         }
 
-        // no non-zero digits anywhere, every query is trivially 0
         if (compressedLength == 0) {
             return new int[q];
         }
 
-        int[] digits = new int[compressedLength];
-        int[] positions = new int[compressedLength];
-
-        // second pass fills the compressed digit/position arrays directly by index,
-        // avoids the earlier List.get(i) boxing conversion loop entirely
-        int idx = 0;
-        for (int i = 0; i < n; i++) {
-            if (posToCompressed[i] != -1) {
-                digits[idx] = chars[i] - '0';
-                positions[idx] = i;
-                idx++;
-            }
-        }
-
-        // prefix sum of digit values for O(1) digit-sum queries
+        // build digitPrefix, power10, prefixNumber in a single forward pass,
+        // reading straight from chars[] instead of from an intermediate digits[] array
         long[] digitPrefix = new long[compressedLength + 1];
-        for (int i = 0; i < compressedLength; i++) {
-            digitPrefix[i + 1] = digitPrefix[i] + digits[i];
-        }
-
-        // precompute powers of 10 modulo MOD
         long[] power10 = new long[compressedLength + 1];
-        power10[0] = 1;
-        for (int i = 1; i <= compressedLength; i++) {
-            power10[i] = (power10[i - 1] * 10) % MOD;
-        }
-
-        // prefix concatenation values: prefixNumber[i] is digits[0..i-1] concatenated mod MOD
         long[] prefixNumber = new long[compressedLength + 1];
-        for (int i = 0; i < compressedLength; i++) {
-            prefixNumber[i + 1] = (prefixNumber[i] * 10 + digits[i]) % MOD;
+        power10[0] = 1;
+
+        int c = 0;
+        for (int i = 0; i < n; i++) {
+            int digit = chars[i] - '0';
+            if (digit == 0) continue;
+
+            digitPrefix[c + 1] = digitPrefix[c] + digit;
+            power10[c + 1] = (power10[c] * 10) % MOD;
+            prefixNumber[c + 1] = (prefixNumber[c] * 10 + digit) % MOD;
+            c++;
         }
 
         // nextNonZero[i] = compressed index of the first non-zero digit at
-        // position >= i, or compressedLength (sentinel, out of range) if none exists.
-        // built with one backward scan instead of a binary search per query,
-        // turning compressedLeft lookup into O(1) instead of O(log n)
+        // position >= i (or compressedLength if none exists beyond i).
+        // single backward pass tracking the compressed index directly,
+        // replaces both the old posToCompressed[] array and any binary search
         int[] nextNonZero = new int[n + 1];
+        int backwardIdx = compressedLength;
         nextNonZero[n] = compressedLength;
         for (int i = n - 1; i >= 0; i--) {
-            nextNonZero[i] = (posToCompressed[i] != -1) ? posToCompressed[i] : nextNonZero[i + 1];
+            if (chars[i] != '0') backwardIdx--;
+            nextNonZero[i] = backwardIdx;
         }
 
         // prevNonZero[i] = compressed index of the last non-zero digit at
-        // position <= i, or -1 (sentinel, out of range) if none exists.
-        // built with one forward scan, replaces the upperBound binary search per query
+        // position <= i (or -1 if none exists up to i). single forward pass
         int[] prevNonZero = new int[n];
-        int running = -1;
+        int forwardIdx = -1;
         for (int i = 0; i < n; i++) {
-            if (posToCompressed[i] != -1) {
-                running = posToCompressed[i];
-            }
-            prevNonZero[i] = running;
+            if (chars[i] != '0') forwardIdx++;
+            prevNonZero[i] = forwardIdx;
         }
 
         int[] answer = new int[q];
 
-        // every query now resolves in true O(1), no binary search calls at all
+        // every query resolves in O(1): two array lookups, no search of any kind
         for (int i = 0; i < q; i++) {
             int left = queries[i][0];
             int right = queries[i][1];
@@ -103,7 +76,6 @@ class Solution {
             }
 
             long digitSum = digitPrefix[compressedRight + 1] - digitPrefix[compressedLeft];
-
             int length = compressedRight - compressedLeft + 1;
 
             long concatenatedNumber = (prefixNumber[compressedRight + 1]
