@@ -2,128 +2,116 @@ import java.util.*;
 
 class Solution {
     private static final long MOD = 1_000_000_007L;
+
     public int[] sumAndMultiply(String s, int[][] queries) {
-        
+
         int n = s.length();
         int q = queries.length;
 
-        // step 1: compress the string by keeping only non-zero digits 
-        // store both digits value and its original position
-        ArrayList<Integer> digitList = new ArrayList<>();
-        ArrayList<Integer> positionList = new ArrayList<>();
+        // convert once to char array, avoids repeated charAt() into the String object
+        char[] chars = s.toCharArray();
+
+        // posToCompressed[i] = compressed index of the digit at position i if it's
+        // non-zero, otherwise -1. built directly with primitive arrays, no
+        // ArrayList<Integer> boxing/unboxing overhead for up to n elements
+        int[] posToCompressed = new int[n];
+        int compressedLength = 0;
 
         for (int i = 0; i < n; i++) {
-            int digit = s.charAt(i) - '0';
-
+            int digit = chars[i] - '0';
             if (digit != 0) {
-                digitList.add(digit);
-                positionList.add(i);
+                posToCompressed[i] = compressedLength;
+                compressedLength++;
+            } else {
+                posToCompressed[i] = -1;
             }
         }
 
-        int compressedLength = digitList.size();
-
-        // if the string contains no non-zero digits, every query immediately evaluates to 0
-        if (compressedLength == 0)
+        // no non-zero digits anywhere, every query is trivially 0
+        if (compressedLength == 0) {
             return new int[q];
-        
+        }
+
         int[] digits = new int[compressedLength];
         int[] positions = new int[compressedLength];
 
-        for (int i = 0; i < compressedLength; i++) {
-            digits[i] = digitList.get(i);
-            positions[i] = positionList.get(i);
+        // second pass fills the compressed digit/position arrays directly by index,
+        // avoids the earlier List.get(i) boxing conversion loop entirely
+        int idx = 0;
+        for (int i = 0; i < n; i++) {
+            if (posToCompressed[i] != -1) {
+                digits[idx] = chars[i] - '0';
+                positions[idx] = i;
+                idx++;
+            }
         }
 
-        // step 2: prefix sum of digit valus allows O(1)  digit-sum queries
+        // prefix sum of digit values for O(1) digit-sum queries
         long[] digitPrefix = new long[compressedLength + 1];
-
-        for (int i = 0; i < compressedLength; i++)
+        for (int i = 0; i < compressedLength; i++) {
             digitPrefix[i + 1] = digitPrefix[i] + digits[i];
-        
-        // step 3: precompute powers of 10 modulo MOD
+        }
+
+        // precompute powers of 10 modulo MOD
         long[] power10 = new long[compressedLength + 1];
         power10[0] = 1;
-
-        for (int i = 1; i <= compressedLength; i++)
+        for (int i = 1; i <= compressedLength; i++) {
             power10[i] = (power10[i - 1] * 10) % MOD;
-        
-        // step 4: prefix concatenation vlaues
-        // prefixNumber[i] represents the concatenated value pf digits[0..i-1] modulo MOD
-        long[] prefixNumber = new long[compressedLength + 1];
+        }
 
-        for (int i = 0; i < compressedLength; i++) 
+        // prefix concatenation values: prefixNumber[i] is digits[0..i-1] concatenated mod MOD
+        long[] prefixNumber = new long[compressedLength + 1];
+        for (int i = 0; i < compressedLength; i++) {
             prefixNumber[i + 1] = (prefixNumber[i] * 10 + digits[i]) % MOD;
-        
+        }
+
+        // nextNonZero[i] = compressed index of the first non-zero digit at
+        // position >= i, or compressedLength (sentinel, out of range) if none exists.
+        // built with one backward scan instead of a binary search per query,
+        // turning compressedLeft lookup into O(1) instead of O(log n)
+        int[] nextNonZero = new int[n + 1];
+        nextNonZero[n] = compressedLength;
+        for (int i = n - 1; i >= 0; i--) {
+            nextNonZero[i] = (posToCompressed[i] != -1) ? posToCompressed[i] : nextNonZero[i + 1];
+        }
+
+        // prevNonZero[i] = compressed index of the last non-zero digit at
+        // position <= i, or -1 (sentinel, out of range) if none exists.
+        // built with one forward scan, replaces the upperBound binary search per query
+        int[] prevNonZero = new int[n];
+        int running = -1;
+        for (int i = 0; i < n; i++) {
+            if (posToCompressed[i] != -1) {
+                running = posToCompressed[i];
+            }
+            prevNonZero[i] = running;
+        }
+
         int[] answer = new int[q];
 
-        // step 5: process every query independently
+        // every query now resolves in true O(1), no binary search calls at all
         for (int i = 0; i < q; i++) {
-
             int left = queries[i][0];
             int right = queries[i][1];
 
-            // locate the first non-zero digit inside [left, right]
-            int compressedLeft = lowerBound(positions, left);
+            int compressedLeft = nextNonZero[left];
+            int compressedRight = prevNonZero[right];
 
-            // locate the last non-zero digit inside [left, right]
-            int compressedRight = upperBound(positions, right) - 1;
-
-            // no non-zero digits exist inside this substring
-            if (compressedLeft > compressedRight) {
+            if (compressedLeft >= compressedLength || compressedRight < 0 || compressedLeft > compressedRight) {
                 answer[i] = 0;
                 continue;
             }
 
-            // retrieve digit sum in O(1)
             long digitSum = digitPrefix[compressedRight + 1] - digitPrefix[compressedLeft];
 
-            // number of compressed digits inside this substring
             int length = compressedRight - compressedLeft + 1;
 
-            // retrieve concatenated value in O(1)
-            long concatenatedNumber = (prefixNumber[compressedRight + 1] - (prefixNumber[compressedLeft] * power10[length]) % MOD + MOD) % MOD;
+            long concatenatedNumber = (prefixNumber[compressedRight + 1]
+                    - (prefixNumber[compressedLeft] * power10[length]) % MOD + MOD) % MOD;
 
-            // final answer
             answer[i] = (int) ((concatenatedNumber * digitSum) % MOD);
         }
 
         return answer;
-    }
-
-    // first index whose position >=mtarget
-    private int lowerBound(int[] positions, int target) {
-
-        int left = 0;
-        int right = positions.length;
-
-        while (left < right) {
-            int mid = left + (right - left) / 2;
-
-            if (positions[mid] < target)
-                left = mid + 1;
-            else
-                right = mid;
-        }
-        
-        return left;
-    }
-
-    // first index whose position > target
-    private int upperBound(int[] positions, int target) {
-
-        int left = 0;
-        int right = positions.length;
-
-        while (left < right) {
-            int mid = left + (right - left) / 2;
-
-            if (positions[mid] <= target)
-                left = mid + 1;
-            else
-                right = mid;
-        }
-        
-        return left;
     }
 }
