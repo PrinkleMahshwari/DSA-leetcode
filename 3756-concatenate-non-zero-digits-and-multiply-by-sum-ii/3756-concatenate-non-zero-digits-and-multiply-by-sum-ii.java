@@ -9,40 +9,41 @@ class Solution {
         int q = queries.length;
         char[] chars = s.toCharArray();
 
-        // count non-zero digits first; this avoids ever allocating separate
-        // digits[]/positions[] scratch arrays like the earlier version did --
-        // everything below is built directly off chars[]
-        int compressedLength = 0;
-        for (int i = 0; i < n; i++) {
-            if (chars[i] != '0') compressedLength++;
-        }
-
-        if (compressedLength == 0) {
-            return new int[q];
-        }
-
-        // build digitPrefix, power10, prefixNumber in a single forward pass,
-        // reading straight from chars[] instead of from an intermediate digits[] array
-        long[] digitPrefix = new long[compressedLength + 1];
-        long[] power10 = new long[compressedLength + 1];
-        long[] prefixNumber = new long[compressedLength + 1];
+        // single forward pass builds digitPrefix, power10, prefixNumber, AND
+        // prevNonZero all at once, using compressedLength as a running counter
+        // instead of a separate counting pass first. arrays are allocated at
+        // size n+1 (worst case: every char non-zero) so we never need to know
+        // the final compressedLength in advance -- this merges what was
+        // previously two separate forward passes into one
+        int[] digitPrefix = new int[n + 1]; // int is enough: max sum is 9*10^5, no overflow, no mod needed
+        long[] power10 = new long[n + 1];
+        long[] prefixNumber = new long[n + 1];
+        int[] prevNonZero = new int[n];
         power10[0] = 1;
 
         int c = 0;
         for (int i = 0; i < n; i++) {
             int digit = chars[i] - '0';
-            if (digit == 0) continue;
-
-            digitPrefix[c + 1] = digitPrefix[c] + digit;
-            power10[c + 1] = (power10[c] * 10) % MOD;
-            prefixNumber[c + 1] = (prefixNumber[c] * 10 + digit) % MOD;
-            c++;
+            if (digit != 0) {
+                digitPrefix[c + 1] = digitPrefix[c] + digit;
+                power10[c + 1] = (power10[c] * 10) % MOD;
+                prefixNumber[c + 1] = (prefixNumber[c] * 10 + digit) % MOD;
+                c++;
+            }
+            // prevNonZero tracks the compressed index as of THIS position,
+            // filled in the same forward pass instead of a dedicated separate loop
+            prevNonZero[i] = c - 1;
         }
 
-        // nextNonZero[i] = compressed index of the first non-zero digit at
-        // position >= i (or compressedLength if none exists beyond i).
-        // single backward pass tracking the compressed index directly,
-        // replaces both the old posToCompressed[] array and any binary search
+        int compressedLength = c;
+
+        if (compressedLength == 0) {
+            return new int[q];
+        }
+
+        // nextNonZero[i] = compressed index of first non-zero digit at position >= i.
+        // needs a backward scan since it depends on future positions, so this
+        // stays a separate pass -- can't be merged with the forward one above
         int[] nextNonZero = new int[n + 1];
         int backwardIdx = compressedLength;
         nextNonZero[n] = compressedLength;
@@ -51,28 +52,18 @@ class Solution {
             nextNonZero[i] = backwardIdx;
         }
 
-        // prevNonZero[i] = compressed index of the last non-zero digit at
-        // position <= i (or -1 if none exists up to i). single forward pass
-        int[] prevNonZero = new int[n];
-        int forwardIdx = -1;
-        for (int i = 0; i < n; i++) {
-            if (chars[i] != '0') forwardIdx++;
-            prevNonZero[i] = forwardIdx;
-        }
-
         int[] answer = new int[q];
 
-        // every query resolves in O(1): two array lookups, no search of any kind
         for (int i = 0; i < q; i++) {
-            int left = queries[i][0];
-            int right = queries[i][1];
+            int[] query = queries[i];
+            int left = query[0];
+            int right = query[1];
 
             int compressedLeft = nextNonZero[left];
             int compressedRight = prevNonZero[right];
 
             if (compressedLeft >= compressedLength || compressedRight < 0 || compressedLeft > compressedRight) {
-                answer[i] = 0;
-                continue;
+                continue; // answer[i] already 0 by default, skip the write
             }
 
             long digitSum = digitPrefix[compressedRight + 1] - digitPrefix[compressedLeft];
