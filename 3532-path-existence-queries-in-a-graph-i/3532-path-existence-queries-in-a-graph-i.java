@@ -1,9 +1,12 @@
 class Solution {
     public boolean[] pathExistenceQueries(int n, int[] nums, int maxDiff, int[][] queries) {
         
-        // nums is sorted, so for any i < j,
-        // nums[j] - nums[i] >= nums[i+1] - nums[i] (since nums is non-decreasing,
-        // every intermediate step's gap is <= total gap). 
+        // nums is already sorted.
+        // If every adjacent gap between two indices is <= maxDiff,
+        // then those nodes are connected through intermediate nodes.
+        // Therefore, each connected component forms one continuous segment.
+        // Whenever an adjacent gap exceeds maxDiff, a brand-new component begins.
+        
         int[] componentId = new int[n];
         componentId[0] = 0;
 
@@ -20,7 +23,7 @@ class Solution {
         int q = queries.length;
         boolean[] answer = new boolean[q];
 
-        // each query now resolves in true O(1): just compate component ids
+        // each query now resolves in true O(1): just compare component ids
         for (int i = 0; i < q; i++) {
             int u = queries[i][0];
             int v = queries[i][1];
