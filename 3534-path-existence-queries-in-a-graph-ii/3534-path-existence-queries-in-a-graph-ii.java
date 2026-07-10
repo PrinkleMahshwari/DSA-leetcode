@@ -4,83 +4,130 @@ class Solution {
 
     public int[] pathExistenceQueries(int n, int[] nums, int maxDiff, int[][] queries) {
 
-        // sort indices by nums value, since edges depend only on value gap
+        // Step 1: Sort nodes by their values.
+        // The graph depends only on value differences, not on original indices.
         Integer[] order = new Integer[n];
-        for (int i = 0; i < n; i++) order[i] = i;
-        Arrays.sort(order, (a, b) -> nums[a] - nums[b]);
+        for (int i = 0; i < n; i++)
+            order[i] = i;
 
-        int[] sortedVal = new int[n];
-        int[] posInSorted = new int[n]; // original index -> sorted position
+        Arrays.sort(order, (a, b) -> Integer.compare(nums[a], nums[b]));
+
+        // sortedValue[i] = value at sorted position i
+        // sortedPosition[originalIndex] = position after sorting
+        int[] sortedValue = new int[n];
+        int[] sortedPosition = new int[n];
+
         for (int i = 0; i < n; i++) {
-            sortedVal[i] = nums[order[i]];
-            posInSorted[order[i]] = i;
+            sortedValue[i] = nums[order[i]];
+            sortedPosition[order[i]] = i;
         }
 
-        // farthest[i] = furthest sorted position reachable in ONE hop from i
-        // two pointer works since sortedVal is non-decreasing
-        int[] farthest = new int[n];
+        // Step 2: Sliding Window
+        // furthestReach[i] = furthest sorted position reachable in ONE graph edge.
+        // Since sortedValue is non-decreasing, a single moving pointer gives O(n).
+        int[] furthestReach = new int[n];
         int right = 0;
-        for (int i = 0; i < n; i++) {
-            if (right < i) right = i;
-            while (right + 1 < n && sortedVal[right + 1] - sortedVal[i] <= maxDiff) right++;
-            farthest[i] = right;
+
+        for (int left = 0; left < n; left++) {
+
+            if (right < left)
+                right = left;
+
+            while (right + 1 < n &&
+                   sortedValue[right + 1] - sortedValue[left] <= maxDiff) {
+                right++;
+            }
+
+            furthestReach[left] = right;
         }
 
-        // component id via interval-merge sweep, same idea as part I but generalized
-        int[] component = new int[n];
-        int compId = 0;
-        int maxReach = farthest[0];
-        component[0] = 0;
+        // Step 3: Connected Components
+        // Every node represents an interval:
+        //
+        //      [ currentPosition ... furthestReach[currentPosition] ]
+        //
+        // If the next interval begins before the current merged interval ends,
+        // both belong to the same connected component.
+        // Otherwise, a brand-new component starts.
+        int[] componentId = new int[n];
+
+        int currentComponent = 0;
+        int currentMaximumReach = furthestReach[0];
+
+        componentId[0] = currentComponent;
+
         for (int i = 1; i < n; i++) {
-            if (i > maxReach) compId++; // gap found, new component starts
-            component[i] = compId;
-            maxReach = Math.max(maxReach, farthest[i]);
+
+            if (i > currentMaximumReach)
+                currentComponent++;
+
+            componentId[i] = currentComponent;
+
+            currentMaximumReach =
+                Math.max(currentMaximumReach, furthestReach[i]);
         }
 
-        // binary lifting table on farthest jumps, for O(log n) min-hop queries
-        int LOG = 1;
-        while ((1 << LOG) < n) LOG++;
-        LOG++;
+        // Step 4: Binary Lifting
+        //
+        // jump[k][i] = furthest sorted position reachable after exactly 2^k edges
+        // starting from sorted position i.
+        int LOG = 32 - Integer.numberOfLeadingZeros(n);
 
-        int[][] up = new int[LOG][n];
-        up[0] = farthest;
+        int[][] jump = new int[LOG][n];
+
+        System.arraycopy(furthestReach, 0, jump[0], 0, n);
+
         for (int k = 1; k < LOG; k++) {
             for (int i = 0; i < n; i++) {
-                up[k][i] = up[k - 1][up[k - 1][i]];
+                jump[k][i] = jump[k - 1][ jump[k - 1][i] ];
             }
         }
 
         int q = queries.length;
         int[] answer = new int[q];
 
+        // Step 5: Answer each query independently.
         for (int i = 0; i < q; i++) {
-            int u = posInSorted[queries[i][0]];
-            int v = posInSorted[queries[i][1]];
 
-            if (u == v) {
+            int left =
+                sortedPosition[queries[i][0]];
+
+            int rightPosition =
+                sortedPosition[queries[i][1]];
+
+            // same node
+            if (left == rightPosition) {
                 answer[i] = 0;
                 continue;
             }
 
-            if (u > v) { int tmp = u; u = v; v = tmp; } // always jump left to right
+            // always jump from left -> right
+            if (left > rightPosition) {
+                int temp = left;
+                left = rightPosition;
+                rightPosition = temp;
+            }
 
-            if (component[u] != component[v]) {
+            // different connected components
+            if (componentId[left] != componentId[rightPosition]) {
                 answer[i] = -1;
                 continue;
             }
 
-            // greedy binary lifting: take biggest jump that still undershoots v
-            int cur = u;
-            int steps = 0;
+            int current = left;
+            int minimumEdges = 0;
+
+            // Greedily take the largest jump that still stays before the target.
             for (int k = LOG - 1; k >= 0; k--) {
-                if (up[k][cur] < v) {
-                    cur = up[k][cur];
-                    steps += (1 << k);
+
+                if (jump[k][current] < rightPosition) {
+                    current = jump[k][current];
+                    minimumEdges += 1 << k;
                 }
             }
-            steps++; // final hop lands on or past v
 
-            answer[i] = steps;
+            // Final edge reaches (or passes) the destination.
+            answer[i] = minimumEdges + 1;
         }
 
         return answer;
