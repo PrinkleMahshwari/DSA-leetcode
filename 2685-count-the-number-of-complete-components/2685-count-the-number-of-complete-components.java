@@ -1,64 +1,69 @@
 class Solution {
 
-    private int[] parent;
-    private int[] size;
-    private int[] edgeCount;
-
     public int countCompleteComponents(int n, int[][] edges) {
-        
-        // union-find, smll n <= 50 so no rank/path compression needed for perf,
-        // but path compression added anyway since it's basically free
-        parent = new int[n];
-        size = new int[n];
-        edgeCount = new int[n];
+
+        // n <= 50, so byte is enough for parent/size (max value 50),
+        // short is enough for edgeCount (max ~1225), shaves a few bytes per array
+        // vs using int[] everywhere
+        byte[] parent = new byte[n];
+        byte[] size = new byte[n];
+        short[] edgeCount = new short[n];
 
         for (int i = 0; i < n; i++) {
-            parent[i] = i;
+            parent[i] = (byte) i;
             size[i] = 1;
         }
 
-        for (int[] edge : edges)
-            union(edge[0], edge[1]);
-        
+        for (int[] edge : edges) {
+            int a = edge[0];
+            int b = edge[1];
+
+            // iterative find with path compression, no recursion frames on the call stack
+            int rootA = find(parent, a);
+            int rootB = find(parent, b);
+
+            if (rootA == rootB) {
+                edgeCount[rootA]++;
+                continue;
+            }
+
+            if (size[rootA] < size[rootB]) {
+                int tmp = rootA; rootA = rootB; rootB = tmp;
+            }
+
+            parent[rootB] = (byte) rootA;
+            size[rootA] += size[rootB];
+            edgeCount[rootA] += edgeCount[rootB] + 1;
+        }
+
         int count = 0;
 
-        // for each root, component is complete iff edges == m*(m-1)/2
         for (int i = 0; i < n; i++) {
-            if (find(i) == i) {
+            if (find(parent, i) == i) {
                 int m = size[i];
-                long expectedEdges = (long) m * (m - 1) / 2;
-                if (edgeCount[i] == expectedEdges)
+                int expectedEdges = m * (m - 1) / 2; // max ~1225, fits int easily
+                if (edgeCount[i] == expectedEdges) {
                     count++;
+                }
             }
         }
 
-        return count;        
+        return count;
     }
 
-    private int find(int x) {
-        if (parent[x] != x)
-            parent[x] = find(parent[x]); // path compression
-        
-        return parent[x];
-    }
-
-    private void union(int a, int b) {
-        int rootA = find(a);
-        int rootB = find(b);
-
-        if (rootA == rootB) {
-            // both endpoints already in same component, just count the edge there
-            edgeCount[rootA]++;
-            return;
+    // iterative path compression: first pass finds root, second pass flattens the chain
+    private int find(byte[] parent, int x) {
+        int root = x;
+        while (parent[root] != root) {
+            root = parent[root];
         }
 
-        // merge smaller into larger, caryy over size and ege count
-        if (size[rootA] < size[rootB]) {
-            int tmp = rootA; rootA = rootB; rootB = tmp;
+        while (parent[x] != root) {
+            int next = parent[x];
+            parent[x] = (byte) root;
+            x = next;
         }
 
-        parent[rootB] = rootA;
-        size[rootA] += size[rootB];
-        edgeCount[rootA] += edgeCount[rootB] + 1; // +1 for the connecting edge itself
+        return root;
     }
 }
