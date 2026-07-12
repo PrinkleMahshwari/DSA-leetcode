@@ -1,48 +1,32 @@
-import java.util.*;
-
 class Solution {
-
     public int[] arrayRankTransform(int[] arr) {
         int n = arr.length;
 
-        if (n == 0) return arr;
+        if (n == 0) return arr; // nothing to rank
 
-        // pack (value, original index) into a single primitive long per element:
-        // value shifted into high bits, index in low bits. this lets us sort a
-        // plain long[] with Arrays.sort's dual-pivot quicksort (primitive, no
-        // boxing, no comparator call overhead) instead of Integer[] + comparator,
-        // which was the actual runtime cost in the previous version
-        long[] packed = new long[n];
-        int indexBits = 20; // 2^20 > 10^5, enough room for any valid index
-        long indexMask = (1L << indexBits) - 1;
+        // sort a clone, keeps original arr untouched for the final output pass
+        int[] sorted = arr.clone();
+        Arrays.sort(sorted);
 
-        for (int i = 0; i < n; i++) {
-            // shift value up so it sorts correctly (add offset to keep it non-negative
-            // pre-shift, avoids sign bit interfering with ordering)
-            long shiftedValue = (long) arr[i] + 2_000_000_000L;
-            packed[i] = (shiftedValue << indexBits) | i;
-        }
-
-        Arrays.sort(packed); // primitive long[] sort, no boxing anywhere
-
-        int[] result = new int[n];
+        // map each distinct value directly to its rank using a HashMap,
+        // avoids binary serach per element later
+        Map<Integer, Integer> rankOf = new HashMap<>();
         int rank = 1;
 
-        int prevIndex = (int) (packed[0] & indexMask);
-        result[prevIndex] = rank;
-
-        for (int i = 1; i < n; i++) {
-            long prevShiftedValue = packed[i - 1] >> indexBits;
-            long curShiftedValue = packed[i] >> indexBits;
-
-            if (curShiftedValue != prevShiftedValue) {
+        for (int i = 0; i < n; i++) {
+            // only assign a new rank the first time a distinct valeue is seen,
+            // duplicates get skipped so rank stays "as small as possible"
+            if (!rankOf.containsKey(sorted[i])) {
+                rankOf.put(sorted[i], rank);
                 rank++;
-            }
-
-            int curIndex = (int) (packed[i] & indexMask);
-            result[curIndex] = rank;
+            } 
         }
 
+        // single pass to build the output using O(1) map lookups
+        int[] result = new int[n];
+        for (int i = 0; i < n; i++) 
+            result[i] = rankOf.get(arr[i]);
+        
         return result;
     }
 }
