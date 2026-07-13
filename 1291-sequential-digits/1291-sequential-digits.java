@@ -3,19 +3,18 @@ class Solution {
     public List<Integer> sequentialDigits(int low, int high) {
 
         List<Integer> result = new ArrayList<>();
-        String digits = "123456789";
 
-        // sliding window over "123456789": every window of length L is
-        // automatically a valid sequential-digit number, no need to build
-        // digit-by-digit or check validity separately
+        // build numbers directly via arithmetic instead of substring + parseInt,
+        // avoids String slicing and parsing overhead entirely
         for (int length = 2; length <= 9; length++) {
-            for (int start = 0; start + length <= 9; start++) {
+            for (int start = 1; start + length - 1 <= 9; start++) {
 
-                int num = Integer.parseInt(digits.substring(start, start + length));
+                int num = 0;
+                for (int d = start; d < start + length; d++) {
+                    num = num * 10 + d;
+                }
 
-                // numbers grow with window start for a fixed length, so once
-                // we exceed high there's no point checking longer starts here
-                if (num > high) break;
+                if (num > high) break; // increasing start only grows num further, stop early
 
                 if (num >= low) {
                     result.add(num);
@@ -23,11 +22,9 @@ class Solution {
             }
         }
 
-        // window lengths were iterated smallest to largest, but within each
-        // length results are naturally increasing too, so a single sort
-        // fixes any cross-length ordering issues if lengths overlap ranges
-        Collections.sort(result);
-
+        // no sort needed: length ascending + start ascending already yields
+        // globally increasing values, since any number with more digits is
+        // always larger than one with fewer digits
         return result;
     }
 }
