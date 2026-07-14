@@ -1,96 +1,94 @@
 import java.util.*;
 
 class Solution {
+
     private static final int MOD = 1_000_000_007;
 
     public int subsequencePairCount(int[] nums) {
-        int maxVal = 0;
-        for (int num : nums) {
-            if (num > maxVal) {
-                maxVal = num;
-            }
-        }
-
-        // 1. Calculate precise element frequency counts
-        int[] freq = new int[maxVal + 1];
-        for (int num : nums) {
-            freq[num]++;
-        }
-
-        // Precompute total counts of multiples for each value up to maxVal
-        int[] mul = new int[maxVal + 1];
-        for (int v = 1; v <= maxVal; v++) {
-            for (int x = v; x <= maxVal; x += v) {
-                mul[v] += freq[x];
-            }
-        }
-
-        // 2. Precompute powers of 2 and 3 to eliminate math loop overheads
         int n = nums.length;
+
+        int maxVal = 1;
+        for (int num : nums) maxVal = Math.max(maxVal, num);
+        int size = maxVal + 1;
+
+        // freq of each value, single pass, no gcd computation per element
+        int[] cnt = new int[size];
+        for (int num : nums) cnt[num]++;
+
+        // c[d] = count of elements divisible by d, standard divisor sieve
+        // this replaces the per-element gcd-update DP entirely -- n only
+        // shows up HERE, everything after this is pure O(maxVal^2 log maxVal)
+        int[] c = new int[size];
+        for (int d = 1; d <= maxVal; d++) {
+            for (int v = d; v <= maxVal; v += d) {
+                c[d] += cnt[v];
+            }
+        }
+
+        // powers of 2 and 3 up to n, since c[d] can never exceed n
         long[] pow2 = new long[n + 1];
         long[] pow3 = new long[n + 1];
-        pow2[0] = 1;
-        pow3[0] = 1;
+        pow2[0] = 1; pow3[0] = 1;
         for (int i = 1; i <= n; i++) {
             pow2[i] = (pow2[i - 1] * 2) % MOD;
             pow3[i] = (pow3[i - 1] * 3) % MOD;
         }
 
-        // 3. Dynamic 2D Exclusion table scaled tightly to maxVal's exact limit
-        long[][] valid = new long[maxVal + 1][maxVal + 1];
-        long totalAnswer = 0;
+        // N[a][b] = # disjoint nonempty pairs (A,B) with gcd(A) a multiple of a,
+        // gcd(B) a multiple of b -- pure combinatorics on divisor counts,
+        // each element gets 3/2/2/1 choices depending on which of a,b it's
+        // divisible by, corrected for A-empty / B-empty via inclusion-exclusion
+        long[] N = new long[size * size];
 
-        // Iterate backwards over all pairs of possible divisors (f, s)
-        for (int f = maxVal; f >= 1; f--) {
-            for (int s = maxVal; s >= 1; s--) {
-                int g = gcd(f, s);
-                // Avoid potential overflow during multiplication for large bounds
-                long lcmVal = ((long) f * s) / g;
-                
-                int c_both = (lcmVal <= maxVal) ? mul[(int) lcmVal] : 0;
-                int c_f = mul[f];
-                int c_s = mul[s];
+        for (int a = 1; a <= maxVal; a++) {
+            int aRow = a * size;
+            for (int b = 1; b <= maxVal; b++) {
+                int g = gcd(a, b);
+                long lcm = (long) (a / g) * b;
 
-                int c_f_only = c_f - c_both;
-                int c_s_only = c_s - c_both;
+                int both = (lcm <= maxVal) ? c[(int) lcm] : 0;
+                int onlyA = c[a] - both;
+                int onlyB = c[b] - both;
 
-                // Combinations allowing elements to match the division structures
-                long totalWays = (pow3[c_both] * pow2[c_f_only] % MOD) * pow2[c_s_only] % MOD;
+                long raw = pow3[both] * pow2[onlyA] % MOD * pow2[onlyB] % MOD;
+                long val = (raw - pow2[c[b]] - pow2[c[a]] + 1 + 2L * MOD) % MOD;
 
-                // Subtract configurations producing empty sets
-                totalWays = (totalWays - pow2[c_s] - pow2[c_f] + 1) % MOD;
-                if (totalWays < 0) {
-                    totalWays += MOD;
-                }
-
-                // Sieve out strict multiples that have already been computed 
-                long strictMultiplesSubtract = 0;
-                int maxI = maxVal / f;
-                int maxJ = maxVal / s;
-                
-                for (int i = 1; i <= maxI; i++) {
-                    int nextF = f * i;
-                    for (int j = 1; j <= maxJ; j++) {
-                        if (i == 1 && j == 1) continue;
-                        strictMultiplesSubtract = (strictMultiplesSubtract + valid[nextF][s * j]) % MOD;
-                    }
-                }
-
-                long exactGcdPairs = (totalWays - strictMultiplesSubtract) % MOD;
-                if (exactGcdPairs < 0) {
-                    exactGcdPairs += MOD;
-                }
-
-                valid[f][s] = exactGcdPairs;
-
-                // Accumulate valid pairs where both subsequences share the exact same GCD
-                if (f == s) {
-                    totalAnswer = (totalAnswer + exactGcdPairs) % MOD;
-                }
+                N[aRow + b] = val;
             }
         }
 
-        return (int) totalAnswer;
+        // 2D Mobius inversion done as two independent 1D subtract-multiples
+        // passes (one per axis) -- turns "multiple of a/b" counts into
+        // "exactly a/b" counts. this factorization works because the original
+        // zeta transform is separable across the two axes
+        for (int b = 1; b <= maxVal; b++) {
+            for (int a = maxVal; a >= 1; a--) {
+                long sum = 0;
+                for (int a2 = 2 * a; a2 <= maxVal; a2 += a) {
+                    sum += N[a2 * size + b];
+                }
+                N[a * size + b] = ((N[a * size + b] - sum) % MOD + MOD) % MOD;
+            }
+        }
+
+        for (int a = 1; a <= maxVal; a++) {
+            int aRow = a * size;
+            for (int b = maxVal; b >= 1; b--) {
+                long sum = 0;
+                for (int b2 = 2 * b; b2 <= maxVal; b2 += b) {
+                    sum += N[aRow + b2];
+                }
+                N[aRow + b] = ((N[aRow + b] - sum) % MOD + MOD) % MOD;
+            }
+        }
+
+        // N[g][g] is now exact(g,g): pairs with gcd(A)=gcd(B)=g exactly
+        long answer = 0;
+        for (int g = 1; g <= maxVal; g++) {
+            answer = (answer + N[g * size + g]) % MOD;
+        }
+
+        return (int) answer;
     }
 
     private int gcd(int a, int b) {
