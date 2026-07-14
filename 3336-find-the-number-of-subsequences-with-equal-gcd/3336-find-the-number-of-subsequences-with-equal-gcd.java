@@ -5,83 +5,87 @@ class Solution {
     private static final int MOD = 1_000_000_007;
 
     public int subsequencePairCount(int[] nums) {
-
         int n = nums.length;
 
         int maxVal = 1;
         for (int num : nums) maxVal = Math.max(maxVal, num);
-
         int size = maxVal + 1;
 
-        int[] gcdTable = new int[size * size];
-        for (int a = 0; a <= maxVal; a++) {
-            for (int b = 0; b <= maxVal; b++) {
-                gcdTable[a * size + b] = gcd(a, b);
+        // freq of each value, single pass, no gcd computation per element
+        int[] cnt = new int[size];
+        for (int num : nums) cnt[num]++;
+
+        // c[d] = count of elements divisible by d, standard divisor sieve
+        // this replaces the per-element gcd-update DP entirely -- n only
+        // shows up HERE, everything after this is pure O(maxVal^2 log maxVal)
+        int[] c = new int[size];
+        for (int d = 1; d <= maxVal; d++) {
+            for (int v = d; v <= maxVal; v += d) {
+                c[d] += cnt[v];
             }
         }
 
-        long[] dp = new long[size * size];
-        long[] next = new long[size * size];
-        dp[0] = 1;
+        // powers of 2 and 3 up to n, since c[d] can never exceed n
+        long[] pow2 = new long[n + 1];
+        long[] pow3 = new long[n + 1];
+        pow2[0] = 1; pow3[0] = 1;
+        for (int i = 1; i <= n; i++) {
+            pow2[i] = (pow2[i - 1] * 2) % MOD;
+            pow3[i] = (pow3[i - 1] * 3) % MOD;
+        }
 
-        // tracks the highest gcd value reachable so far, since dp is 0
-        // everywhere beyond it -- lets us shrink the g1/g2 loop bounds as we
-        // go instead of always scanning up to the global maxVal
-        int reachableMax = 0;
+        // N[a][b] = # disjoint nonempty pairs (A,B) with gcd(A) a multiple of a,
+        // gcd(B) a multiple of b -- pure combinatorics on divisor counts,
+        // each element gets 3/2/2/1 choices depending on which of a,b it's
+        // divisible by, corrected for A-empty / B-empty via inclusion-exclusion
+        long[] N = new long[size * size];
 
-        for (int num : nums) {
-            Arrays.fill(next, 0L);
+        for (int a = 1; a <= maxVal; a++) {
+            int aRow = a * size;
+            for (int b = 1; b <= maxVal; b++) {
+                int g = gcd(a, b);
+                long lcm = (long) (a / g) * b;
 
-            int numRow = num * size;
-            int newReachableMax = Math.max(reachableMax, num);
+                int both = (lcm <= maxVal) ? c[(int) lcm] : 0;
+                int onlyA = c[a] - both;
+                int onlyB = c[b] - both;
 
-            for (int g1 = 0; g1 <= reachableMax; g1++) {
-                int g1Base = g1 * size;
-                int gcdG1Val = (g1 == 0) ? num : gcdTable[g1Base + num];
+                long raw = pow3[both] * pow2[onlyA] % MOD * pow2[onlyB] % MOD;
+                long val = (raw - pow2[c[b]] - pow2[c[a]] + 1 + 2L * MOD) % MOD;
 
-                for (int g2 = 0; g2 <= reachableMax; g2++) {
-                    long ways = dp[g1Base + g2];
-                    if (ways == 0) continue;
+                N[aRow + b] = val;
+            }
+        }
 
-                    int idx = g1Base + g2;
-
-                    // deferred modulo: raw sums stay well within long range for
-                    // an entire element's sweep (bounded well under long max),
-                    // so accumulate freely here and reduce mod calls to a single
-                    // pass at the end, instead of one mod per addition (3x fewer
-                    // mod operations overall, which is a real cost at this scale)
-                    next[idx] += ways;
-
-                    int newG1 = gcdG1Val;
-                    int idx2 = newG1 * size + g2;
-                    next[idx2] += ways;
-
-                    int newG2 = (g2 == 0) ? num : gcdTable[g2 * size + num];
-                    int idx3 = g1Base + newG2;
-                    next[idx3] += ways;
-
-                    if (newG1 > newReachableMax) newReachableMax = newG1;
-                    if (newG2 > newReachableMax) newReachableMax = newG2;
+        // 2D Mobius inversion done as two independent 1D subtract-multiples
+        // passes (one per axis) -- turns "multiple of a/b" counts into
+        // "exactly a/b" counts. this factorization works because the original
+        // zeta transform is separable across the two axes
+        for (int b = 1; b <= maxVal; b++) {
+            for (int a = maxVal; a >= 1; a--) {
+                long sum = 0;
+                for (int a2 = 2 * a; a2 <= maxVal; a2 += a) {
+                    sum += N[a2 * size + b];
                 }
+                N[a * size + b] = ((N[a * size + b] - sum) % MOD + MOD) % MOD;
             }
-
-            // single mod pass over only the range that could possibly be nonzero,
-            // instead of mod-ing on every individual addition above
-            int boundedSize = (newReachableMax + 1) * size;
-            for (int idx = 0; idx < boundedSize; idx++) {
-                if (next[idx] >= MOD) next[idx] %= MOD;
-            }
-
-            reachableMax = newReachableMax;
-
-            long[] tmp = dp;
-            dp = next;
-            next = tmp;
         }
 
+        for (int a = 1; a <= maxVal; a++) {
+            int aRow = a * size;
+            for (int b = maxVal; b >= 1; b--) {
+                long sum = 0;
+                for (int b2 = 2 * b; b2 <= maxVal; b2 += b) {
+                    sum += N[aRow + b2];
+                }
+                N[aRow + b] = ((N[aRow + b] - sum) % MOD + MOD) % MOD;
+            }
+        }
+
+        // N[g][g] is now exact(g,g): pairs with gcd(A)=gcd(B)=g exactly
         long answer = 0;
         for (int g = 1; g <= maxVal; g++) {
-            answer = (answer + dp[g * size + g]) % MOD;
+            answer = (answer + N[g * size + g]) % MOD;
         }
 
         return (int) answer;
