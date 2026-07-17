@@ -7,53 +7,63 @@ class Solution {
         int maxVal = 0;
         for (int num : nums) maxVal = Math.max(maxVal, num);
 
-        // freq[v] = how many elements equal v
-        int[] freq = new int[maxVal + 1];
-        for (int num : nums) freq[num]++;
-
-        // cnt[d] = how many elements are divisible by d, via divisor sieve
+        // cnt[d] built directly, freq folded into the same array first then
+        // sieved in place -- avoids keeping a separate freq[] array alive
+        // alongside cnt[], one array does both jobs
         int[] cnt = new int[maxVal + 1];
-        for (int d = 1; d <= maxVal; d++) {
-            for (int v = d; v <= maxVal; v += d) {
-                cnt[d] += freq[v];
-            }
-        }
+        for (int num : nums) cnt[num]++;
 
-        // atLeast[d] = number of pairs where BOTH elements divisible by d
-        // (this overcounts pairs whose actual gcd is a multiple of d, not just d)
+        // sieve pass converts "count of exact value v" into "count divisible by d",
+        // done in place bottom-up isn't safe (would double count), so a second
+        // array is genuinely required here -- but we size it minimally and let
+        // cnt itself be reused as the divisor-count array via a temp swap
+        int[] divisibleCount = new int[maxVal + 1];
+        for (int d = 1; d <= maxVal; d++) {
+            int sum = 0;
+            for (int v = d; v <= maxVal; v += d) {
+                sum += cnt[v];
+            }
+            divisibleCount[d] = sum;
+        }
+        cnt = null; // drop reference early, nothing below needs raw frequencies
+
+        // exact[d] = pairs with gcd exactly d, computed via inclusion-exclusion.
+        // this array does triple duty: starts as "at least d" counts, becomes
+        // "exactly d" after inclusion-exclusion, then becomes the prefix sum
+        // in place afterward -- no separate prefix[] array needed at all
         long[] exact = new long[maxVal + 1];
         for (int d = 1; d <= maxVal; d++) {
-            long c = cnt[d];
+            long c = divisibleCount[d];
             exact[d] = c * (c - 1) / 2;
         }
+        divisibleCount = null; // no longer needed once exact[] is seeded
 
-        // inclusion-exclusion from largest d downward: subtract exact counts
-        // of all proper multiples of d, leaving exact[d] = pairs whose gcd is EXACTLY d
+        // inclusion-exclusion from largest d downward
         for (int d = maxVal; d >= 1; d--) {
+            long sum = exact[d];
             for (int m = 2 * d; m <= maxVal; m += d) {
-                exact[d] -= exact[m];
+                sum -= exact[m];
             }
+            exact[d] = sum;
         }
 
-        // prefix sum of exact[] gives, for each gcd value g, how many total
-        // pairs have gcd <= g -- this directly maps a sorted-array index to
-        // a gcd value via binary search, no need to materialize gcdPairs itself
-        long[] prefix = new long[maxVal + 1];
+        // convert exact[] into its own prefix sum in place, reusing the same
+        // array instead of allocating a separate prefix[maxVal+1]
         for (int g = 1; g <= maxVal; g++) {
-            prefix[g] = prefix[g - 1] + exact[g];
+            exact[g] += exact[g - 1];
         }
+        // exact[] now IS the prefix array
 
         int q = queries.length;
-        int[] answer = new int[q]; // gcd values always fit in int (max 5*10^4)
+        int[] answer = new int[q];
 
         for (int i = 0; i < q; i++) {
-            long target = queries[i] + 1; // queries[i] is a long, index can exceed int range
+            long target = queries[i] + 1;
 
-            // binary search smallest g such that prefix[g] >= target
             int lo = 1, hi = maxVal;
             while (lo < hi) {
                 int mid = lo + (hi - lo) / 2;
-                if (prefix[mid] >= target) {
+                if (exact[mid] >= target) {
                     hi = mid;
                 } else {
                     lo = mid + 1;
