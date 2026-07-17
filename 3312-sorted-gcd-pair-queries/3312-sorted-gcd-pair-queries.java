@@ -7,38 +7,38 @@ class Solution {
         int maxVal = 0;
         for (int num : nums) maxVal = Math.max(maxVal, num);
 
-        // cnt[d] built directly, freq folded into the same array first then
-        // sieved in place -- avoids keeping a separate freq[] array alive
-        // alongside cnt[], one array does both jobs
+        // cnt[v] starts as raw frequency of value v
         int[] cnt = new int[maxVal + 1];
         for (int num : nums) cnt[num]++;
 
-        // sieve pass converts "count of exact value v" into "count divisible by d",
-        // done in place bottom-up isn't safe (would double count), so a second
-        // array is genuinely required here -- but we size it minimally and let
-        // cnt itself be reused as the divisor-count array via a temp swap
-        int[] divisibleCount = new int[maxVal + 1];
+        // in-place divisor-sum sieve (zeta transform), ASCENDING d:
+        // when computing cnt[d], every cnt[m] read (m = 2d, 3d, ...) still
+        // holds its RAW frequency value, because writes only ever happen at
+        // index d itself on this iteration -- larger indices haven't been
+        // touched yet. This is what makes single-array in-place safe; doing
+        // it descending would read already-aggregated values and overcount.
         for (int d = 1; d <= maxVal; d++) {
-            int sum = 0;
-            for (int v = d; v <= maxVal; v += d) {
-                sum += cnt[v];
+            int sum = cnt[d];
+            for (int m = 2 * d; m <= maxVal; m += d) {
+                sum += cnt[m];
             }
-            divisibleCount[d] = sum;
+            cnt[d] = sum;
         }
-        cnt = null; // drop reference early, nothing below needs raw frequencies
+        // cnt[d] now IS "count of elements divisible by d" -- no second
+        // array was ever needed for this step
 
-        // exact[d] = pairs with gcd exactly d, computed via inclusion-exclusion.
-        // this array does triple duty: starts as "at least d" counts, becomes
-        // "exactly d" after inclusion-exclusion, then becomes the prefix sum
-        // in place afterward -- no separate prefix[] array needed at all
+        // exact[] reused for three roles in place: "at least d" -> "exactly d"
+        // (inclusion-exclusion) -> prefix sum. still needs its own long[]
+        // since values can exceed int range (up to ~5*10^9 pairs total)
         long[] exact = new long[maxVal + 1];
         for (int d = 1; d <= maxVal; d++) {
-            long c = divisibleCount[d];
+            long c = cnt[d];
             exact[d] = c * (c - 1) / 2;
         }
-        divisibleCount = null; // no longer needed once exact[] is seeded
+        cnt = null; // drop reference, nothing below needs divisor counts anymore
 
-        // inclusion-exclusion from largest d downward
+        // inclusion-exclusion from largest d downward, local sum avoids
+        // repeated array writes inside the inner loop
         for (int d = maxVal; d >= 1; d--) {
             long sum = exact[d];
             for (int m = 2 * d; m <= maxVal; m += d) {
@@ -47,12 +47,11 @@ class Solution {
             exact[d] = sum;
         }
 
-        // convert exact[] into its own prefix sum in place, reusing the same
-        // array instead of allocating a separate prefix[maxVal+1]
+        // convert exact[] into its own prefix sum in place
         for (int g = 1; g <= maxVal; g++) {
             exact[g] += exact[g - 1];
         }
-        // exact[] now IS the prefix array
+        // exact[] now IS the prefix array too
 
         int q = queries.length;
         int[] answer = new int[q];
