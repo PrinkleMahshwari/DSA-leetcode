@@ -5,7 +5,7 @@ class Solution {
         int mn = nums[0], mx = nums[0];
         for (int num : nums) {
             if (num < mn) mn = num;
-            if (num > mx) mx = num;
+           else if (num > mx) mx = num;
         }
 
         return gcd(mn, mx);
@@ -13,9 +13,8 @@ class Solution {
 
     private int gcd(int a, int b) {
         while (b != 0) {
-            int t = b;
-            b = a % b;
-            a = t;
+            a %= b; // combined compare+swaps into fewer ops
+            int t = a; a = b; b = t;
         }
         
         return a;
