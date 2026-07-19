@@ -16,6 +16,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 | [0026-remove-duplicates-from-sorted-array](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0026-remove-duplicates-from-sorted-array) |
 | [0027-remove-element](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0027-remove-element) |
 | [0088-merge-sorted-array](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0088-merge-sorted-array) |
+| [0169-majority-element](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0169-majority-element) |
 | [1288-remove-covered-intervals](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/1288-remove-covered-intervals) |
 | [1301-number-of-paths-with-max-score](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/1301-number-of-paths-with-max-score) |
 | [1331-rank-transform-of-an-array](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/1331-rank-transform-of-an-array) |
@@ -37,6 +38,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 | [0012-integer-to-roman](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0012-integer-to-roman) |
 | [0013-roman-to-integer](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0013-roman-to-integer) |
 | [0017-letter-combinations-of-a-phone-number](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0017-letter-combinations-of-a-phone-number) |
+| [0169-majority-element](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0169-majority-element) |
 | [1331-rank-transform-of-an-array](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/1331-rank-transform-of-an-array) |
 | [1358-number-of-substrings-containing-all-three-characters](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/1358-number-of-substrings-containing-all-three-characters) |
 | [3312-sorted-gcd-pair-queries](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/3312-sorted-gcd-pair-queries) |
@@ -104,6 +106,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 |  |
 | ------- |
 | [0004-median-of-two-sorted-arrays](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0004-median-of-two-sorted-arrays) |
+| [0169-majority-element](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0169-majority-element) |
 ## Two Pointers
 |  |
 | ------- |
@@ -145,6 +148,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 | [0016-3sum-closest](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0016-3sum-closest) |
 | [0018-4sum](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0018-4sum) |
 | [0088-merge-sorted-array](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0088-merge-sorted-array) |
+| [0169-majority-element](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0169-majority-element) |
 | [1288-remove-covered-intervals](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/1288-remove-covered-intervals) |
 | [1331-rank-transform-of-an-array](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/1331-rank-transform-of-an-array) |
 | [3534-path-existence-queries-in-a-graph-ii](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/3534-path-existence-queries-in-a-graph-ii) |
@@ -240,6 +244,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 ## Counting
 |  |
 | ------- |
+| [0169-majority-element](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0169-majority-element) |
 | [3312-sorted-gcd-pair-queries](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/3312-sorted-gcd-pair-queries) |
 ## Monotonic Stack
 |  |
