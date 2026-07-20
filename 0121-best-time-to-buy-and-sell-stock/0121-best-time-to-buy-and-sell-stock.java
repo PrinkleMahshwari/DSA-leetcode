@@ -3,6 +3,8 @@ class Solution {
         
         int n = prices.length;
 
+        if (n < 2) return 0; // guard clause for arrays smaller than 2 elements
+
         int minPrice = prices[0];
         int maxProfit = 0;
 
