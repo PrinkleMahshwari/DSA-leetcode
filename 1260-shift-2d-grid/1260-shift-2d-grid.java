@@ -5,27 +5,32 @@ class Solution {
         int n = grid[0].length;
         int total = m * n;
 
-        // effective shift, avoids doing fulll redundant rotations when k > total
         k %= total;
 
-        List<List<Integer>> result = new ArrayList<>();
-        for (int i = 0; i < m; i++)
-            result.add(new ArrayList<>(Collections.nCopies(n, 0)));
-        
-        // treat the grid as one flattened sequence of length m*n: element at
-        // flat index p moves to flat index (p + k) % total. rather than
-        // simulating k shifts one at a time, compute each element's final
-        // position directly in a single pass -- O(m*n) regardless of k
+        // iterate DESTINATION cells in row-major order and pull the source
+        // value for each: dest flat index d comes from source (d - k + total) % total.
+        // this lets us just append() into each row in order, instead of the
+        // previous version's random-access set() into a pre-sized nCopies list
+        // (which allocates a full total-sized Integer(0) list upfront, then
+        // does bounds-checked replacement writes out of order)
+        List<List<Integer>> result = new ArrayList<>(m);
+
+        int srcFlat = (total - k) % total; // source index for destination flat index 0
+
         for (int i = 0; i < m; i++) {
+            List<Integer> row = new ArrayList<>(n);
+
             for (int j = 0; j < n; j++) {
-                int flatIndex = i * n + j;
-                int newFlatIndex = (flatIndex + k) % total;
+                int srcRow = srcFlat / n;
+                int srcCol = srcFlat % n;
 
-                int newRow = newFlatIndex/n;
-                int newCol = newFlatIndex % n;
+                row.add(grid[srcRow][srcCol]);
 
-                result.get(newRow).set(newCol, grid[i][j]);
+                srcFlat++;
+                if (srcFlat == total) srcFlat = 0; // avoid repeated % on every cell
             }
+
+            result.add(row);
         }
 
         return result;
