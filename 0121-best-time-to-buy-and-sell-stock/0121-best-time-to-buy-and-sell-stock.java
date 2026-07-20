@@ -10,17 +10,17 @@ class Solution {
 
         for (int i = 1; i < n; i++) {
 
-            // better buying opporunity found
-            if (prices[i] < minPrice)
+            // better buying opportunity found
+            if (prices[i] < minPrice) {
                 minPrice = prices[i];
-            
-            // sell today
-            int profit = prices[i] - minPrice;
+            } else {
+                // sell today
+                int profit = prices[i] - minPrice;
 
-            // update answer
-            if (profit > maxProfit)
-                maxProfit = profit;
-
+                // update answer
+                if (profit > maxProfit)
+                    maxProfit = profit;
+            }        
         }
 
         return maxProfit;
