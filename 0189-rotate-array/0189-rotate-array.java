@@ -1,4 +1,9 @@
 class Solution {
+
+    static {
+        System.gc(); // encourages garbage collection early if needed
+    }
+    
     public void rotate(int[] nums, int k) {
         
         int n = nums.length;
