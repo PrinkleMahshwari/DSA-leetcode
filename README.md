@@ -26,6 +26,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 | [0189-rotate-array](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0189-rotate-array) |
 | [0238-product-of-array-except-self](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0238-product-of-array-except-self) |
 | [0274-h-index](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0274-h-index) |
+| [0380-insert-delete-getrandom-o1](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0380-insert-delete-getrandom-o1) |
 | [1260-shift-2d-grid](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/1260-shift-2d-grid) |
 | [1288-remove-covered-intervals](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/1288-remove-covered-intervals) |
 | [1301-number-of-paths-with-max-score](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/1301-number-of-paths-with-max-score) |
@@ -50,6 +51,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 | [0013-roman-to-integer](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0013-roman-to-integer) |
 | [0017-letter-combinations-of-a-phone-number](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0017-letter-combinations-of-a-phone-number) |
 | [0169-majority-element](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0169-majority-element) |
+| [0380-insert-delete-getrandom-o1](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0380-insert-delete-getrandom-o1) |
 | [1331-rank-transform-of-an-array](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/1331-rank-transform-of-an-array) |
 | [1358-number-of-substrings-containing-all-three-characters](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/1358-number-of-substrings-containing-all-three-characters) |
 | [3312-sorted-gcd-pair-queries](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/3312-sorted-gcd-pair-queries) |
@@ -69,6 +71,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 | [0012-integer-to-roman](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0012-integer-to-roman) |
 | [0013-roman-to-integer](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0013-roman-to-integer) |
 | [0189-rotate-array](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0189-rotate-array) |
+| [0380-insert-delete-getrandom-o1](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0380-insert-delete-getrandom-o1) |
 | [1979-find-greatest-common-divisor-of-array](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/1979-find-greatest-common-divisor-of-array) |
 | [3312-sorted-gcd-pair-queries](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/3312-sorted-gcd-pair-queries) |
 | [3336-find-the-number-of-subsequences-with-equal-gcd](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/3336-find-the-number-of-subsequences-with-equal-gcd) |
@@ -295,4 +298,12 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 |  |
 | ------- |
 | [3501-maximize-active-section-with-trade-ii](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/3501-maximize-active-section-with-trade-ii) |
+## Design
+|  |
+| ------- |
+| [0380-insert-delete-getrandom-o1](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0380-insert-delete-getrandom-o1) |
+## Randomized
+|  |
+| ------- |
+| [0380-insert-delete-getrandom-o1](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0380-insert-delete-getrandom-o1) |
 <!---LeetCode Topics End-->
