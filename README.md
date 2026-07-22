@@ -102,6 +102,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 | [0022-generate-parentheses](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0022-generate-parentheses) |
 | [0028-find-the-index-of-the-first-occurrence-in-a-string](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0028-find-the-index-of-the-first-occurrence-in-a-string) |
 | [0058-length-of-last-word](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0058-length-of-last-word) |
+| [0392-is-subsequence](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0392-is-subsequence) |
 | [1081-smallest-subsequence-of-distinct-characters](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/1081-smallest-subsequence-of-distinct-characters) |
 | [1358-number-of-substrings-containing-all-three-characters](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/1358-number-of-substrings-containing-all-three-characters) |
 | [1967-number-of-strings-that-appear-as-substrings-in-word](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/1967-number-of-strings-that-appear-as-substrings-in-word) |
@@ -145,6 +146,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 | [0088-merge-sorted-array](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0088-merge-sorted-array) |
 | [0167-two-sum-ii-input-array-is-sorted](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0167-two-sum-ii-input-array-is-sorted) |
 | [0189-rotate-array](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0189-rotate-array) |
+| [0392-is-subsequence](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0392-is-subsequence) |
 | [3534-path-existence-queries-in-a-graph-ii](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/3534-path-existence-queries-in-a-graph-ii) |
 | [3867-sum-of-gcd-of-formed-pairs](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/3867-sum-of-gcd-of-formed-pairs) |
 ## Dynamic Programming
@@ -157,6 +159,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 | [0055-jump-game](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0055-jump-game) |
 | [0121-best-time-to-buy-and-sell-stock](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0121-best-time-to-buy-and-sell-stock) |
 | [0122-best-time-to-buy-and-sell-stock-ii](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0122-best-time-to-buy-and-sell-stock-ii) |
+| [0392-is-subsequence](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0392-is-subsequence) |
 | [1301-number-of-paths-with-max-score](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/1301-number-of-paths-with-max-score) |
 | [3336-find-the-number-of-subsequences-with-equal-gcd](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/3336-find-the-number-of-subsequences-with-equal-gcd) |
 | [3534-path-existence-queries-in-a-graph-ii](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/3534-path-existence-queries-in-a-graph-ii) |
