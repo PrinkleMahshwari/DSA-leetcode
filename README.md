@@ -17,6 +17,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 | [0027-remove-element](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0027-remove-element) |
 | [0036-valid-sudoku](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0036-valid-sudoku) |
 | [0045-jump-game-ii](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0045-jump-game-ii) |
+| [0054-spiral-matrix](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0054-spiral-matrix) |
 | [0055-jump-game](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0055-jump-game) |
 | [0080-remove-duplicates-from-sorted-array-ii](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0080-remove-duplicates-from-sorted-array-ii) |
 | [0088-merge-sorted-array](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0088-merge-sorted-array) |
@@ -224,6 +225,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 |  |
 | ------- |
 | [0036-valid-sudoku](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0036-valid-sudoku) |
+| [0054-spiral-matrix](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0054-spiral-matrix) |
 | [1260-shift-2d-grid](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/1260-shift-2d-grid) |
 | [1301-number-of-paths-with-max-score](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/1301-number-of-paths-with-max-score) |
 | [2812-find-the-safest-path-in-a-grid](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/2812-find-the-safest-path-in-a-grid) |
@@ -289,6 +291,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 ## Simulation
 |  |
 | ------- |
+| [0054-spiral-matrix](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0054-spiral-matrix) |
 | [1260-shift-2d-grid](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/1260-shift-2d-grid) |
 | [3867-sum-of-gcd-of-formed-pairs](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/3867-sum-of-gcd-of-formed-pairs) |
 ## Combinatorics
