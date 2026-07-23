@@ -17,6 +17,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 | [0027-remove-element](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0027-remove-element) |
 | [0036-valid-sudoku](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0036-valid-sudoku) |
 | [0045-jump-game-ii](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0045-jump-game-ii) |
+| [0048-rotate-image](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0048-rotate-image) |
 | [0054-spiral-matrix](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0054-spiral-matrix) |
 | [0055-jump-game](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0055-jump-game) |
 | [0080-remove-duplicates-from-sorted-array-ii](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0080-remove-duplicates-from-sorted-array-ii) |
@@ -76,6 +77,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 | [0009-palindrome-number](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0009-palindrome-number) |
 | [0012-integer-to-roman](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0012-integer-to-roman) |
 | [0013-roman-to-integer](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0013-roman-to-integer) |
+| [0048-rotate-image](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0048-rotate-image) |
 | [0189-rotate-array](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0189-rotate-array) |
 | [0380-insert-delete-getrandom-o1](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0380-insert-delete-getrandom-o1) |
 | [1979-find-greatest-common-divisor-of-array](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/1979-find-greatest-common-divisor-of-array) |
@@ -225,6 +227,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 |  |
 | ------- |
 | [0036-valid-sudoku](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0036-valid-sudoku) |
+| [0048-rotate-image](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0048-rotate-image) |
 | [0054-spiral-matrix](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0054-spiral-matrix) |
 | [1260-shift-2d-grid](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/1260-shift-2d-grid) |
 | [1301-number-of-paths-with-max-score](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/1301-number-of-paths-with-max-score) |
