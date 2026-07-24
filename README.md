@@ -35,6 +35,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 | [0238-product-of-array-except-self](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0238-product-of-array-except-self) |
 | [0274-h-index](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0274-h-index) |
 | [0289-game-of-life](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0289-game-of-life) |
+| [0322-coin-change](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0322-coin-change) |
 | [0380-insert-delete-getrandom-o1](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0380-insert-delete-getrandom-o1) |
 | [1260-shift-2d-grid](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/1260-shift-2d-grid) |
 | [1288-remove-covered-intervals](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/1288-remove-covered-intervals) |
@@ -184,6 +185,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 | [0122-best-time-to-buy-and-sell-stock-ii](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0122-best-time-to-buy-and-sell-stock-ii) |
 | [0139-word-break](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0139-word-break) |
 | [0198-house-robber](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0198-house-robber) |
+| [0322-coin-change](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0322-coin-change) |
 | [0392-is-subsequence](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0392-is-subsequence) |
 | [1301-number-of-paths-with-max-score](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/1301-number-of-paths-with-max-score) |
 | [3336-find-the-number-of-subsequences-with-equal-gcd](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/3336-find-the-number-of-subsequences-with-equal-gcd) |
@@ -220,6 +222,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 ## Breadth-First Search
 |  |
 | ------- |
+| [0322-coin-change](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0322-coin-change) |
 | [2492-minimum-score-of-a-path-between-two-cities](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/2492-minimum-score-of-a-path-between-two-cities) |
 | [2685-count-the-number-of-complete-components](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/2685-count-the-number-of-complete-components) |
 | [2812-find-the-safest-path-in-a-grid](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/2812-find-the-safest-path-in-a-grid) |
