@@ -26,6 +26,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 | [0121-best-time-to-buy-and-sell-stock](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0121-best-time-to-buy-and-sell-stock) |
 | [0122-best-time-to-buy-and-sell-stock-ii](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0122-best-time-to-buy-and-sell-stock-ii) |
 | [0134-gas-station](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0134-gas-station) |
+| [0139-word-break](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0139-word-break) |
 | [0167-two-sum-ii-input-array-is-sorted](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0167-two-sum-ii-input-array-is-sorted) |
 | [0169-majority-element](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0169-majority-element) |
 | [0189-rotate-array](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0189-rotate-array) |
@@ -62,6 +63,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 | [0017-letter-combinations-of-a-phone-number](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0017-letter-combinations-of-a-phone-number) |
 | [0036-valid-sudoku](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0036-valid-sudoku) |
 | [0073-set-matrix-zeroes](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0073-set-matrix-zeroes) |
+| [0139-word-break](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0139-word-break) |
 | [0169-majority-element](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0169-majority-element) |
 | [0380-insert-delete-getrandom-o1](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0380-insert-delete-getrandom-o1) |
 | [1331-rank-transform-of-an-array](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/1331-rank-transform-of-an-array) |
@@ -118,6 +120,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 | [0028-find-the-index-of-the-first-occurrence-in-a-string](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0028-find-the-index-of-the-first-occurrence-in-a-string) |
 | [0058-length-of-last-word](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0058-length-of-last-word) |
 | [0125-valid-palindrome](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0125-valid-palindrome) |
+| [0139-word-break](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0139-word-break) |
 | [0392-is-subsequence](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0392-is-subsequence) |
 | [1081-smallest-subsequence-of-distinct-characters](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/1081-smallest-subsequence-of-distinct-characters) |
 | [1358-number-of-substrings-containing-all-three-characters](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/1358-number-of-substrings-containing-all-three-characters) |
@@ -179,6 +182,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 | [0070-climbing-stairs](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0070-climbing-stairs) |
 | [0121-best-time-to-buy-and-sell-stock](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0121-best-time-to-buy-and-sell-stock) |
 | [0122-best-time-to-buy-and-sell-stock-ii](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0122-best-time-to-buy-and-sell-stock-ii) |
+| [0139-word-break](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0139-word-break) |
 | [0198-house-robber](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0198-house-robber) |
 | [0392-is-subsequence](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0392-is-subsequence) |
 | [1301-number-of-paths-with-max-score](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/1301-number-of-paths-with-max-score) |
@@ -199,6 +203,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 |  |
 | ------- |
 | [0014-longest-common-prefix](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0014-longest-common-prefix) |
+| [0139-word-break](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0139-word-break) |
 ## Sorting
 |  |
 | ------- |
@@ -348,4 +353,5 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 |  |
 | ------- |
 | [0070-climbing-stairs](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0070-climbing-stairs) |
+| [0139-word-break](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0139-word-break) |
 <!---LeetCode Topics End-->
