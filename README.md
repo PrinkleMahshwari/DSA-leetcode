@@ -82,6 +82,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 | [0012-integer-to-roman](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0012-integer-to-roman) |
 | [0013-roman-to-integer](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0013-roman-to-integer) |
 | [0048-rotate-image](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0048-rotate-image) |
+| [0070-climbing-stairs](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0070-climbing-stairs) |
 | [0189-rotate-array](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0189-rotate-array) |
 | [0380-insert-delete-getrandom-o1](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0380-insert-delete-getrandom-o1) |
 | [1979-find-greatest-common-divisor-of-array](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/1979-find-greatest-common-divisor-of-array) |
@@ -174,6 +175,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 | [0022-generate-parentheses](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0022-generate-parentheses) |
 | [0045-jump-game-ii](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0045-jump-game-ii) |
 | [0055-jump-game](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0055-jump-game) |
+| [0070-climbing-stairs](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0070-climbing-stairs) |
 | [0121-best-time-to-buy-and-sell-stock](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0121-best-time-to-buy-and-sell-stock) |
 | [0122-best-time-to-buy-and-sell-stock-ii](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0122-best-time-to-buy-and-sell-stock-ii) |
 | [0392-is-subsequence](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0392-is-subsequence) |
@@ -340,4 +342,8 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 |  |
 | ------- |
 | [0380-insert-delete-getrandom-o1](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0380-insert-delete-getrandom-o1) |
+## Memoization
+|  |
+| ------- |
+| [0070-climbing-stairs](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0070-climbing-stairs) |
 <!---LeetCode Topics End-->
