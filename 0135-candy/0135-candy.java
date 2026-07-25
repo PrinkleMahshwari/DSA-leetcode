@@ -1,30 +1,52 @@
-import java.util.Arrays;
-
 class Solution {
+
     public int candy(int[] ratings) {
+
         int n = ratings.length;
-        if (n <= 1) return n;
-        
-        int[] candies = new int[n];
-        // Requirement 1: Each child gets at least 1 candy
-        Arrays.fill(candies, 1);
-        
-        // Pass 1: Handle left-to-right dependencies
+
+        if (n <= 1)
+            return n;
+
+        int totalCandies = 1;
+
+        int up = 0;      // length of current increasing slope
+        int down = 0;    // length of current decreasing slope
+        int peak = 0;    // length of the last increasing slope
+
         for (int i = 1; i < n; i++) {
+
+            // increasing slope
             if (ratings[i] > ratings[i - 1]) {
-                candies[i] = candies[i - 1] + 1;
+                up++;
+                peak = up;
+                down = 0;
+
+                totalCandies += (up + 1);
+            }
+
+            // flat slope
+            else if (ratings[i] == ratings[i - 1]) {
+                up = 0;
+                down = 0;
+                peak = 0;
+
+                totalCandies += 1;
+            }
+
+            // decreasing slope
+            else {
+                up = 0;
+                down++;
+
+                totalCandies += down;
+
+                // if decreasing length exceeds previous peak,
+                // peak child needs one extra candy
+                if (down > peak)
+                    totalCandies++;
             }
         }
-        
-        // Pass 2: Handle right-to-left dependencies while preserving Pass 1 values
-        int totalCandies = candies[n - 1];
-        for (int i = n - 2; i >= 0; i--) {
-            if (ratings[i] > ratings[i + 1]) {
-                candies[i] = Math.max(candies[i], candies[i + 1] + 1);
-            }
-            totalCandies += candies[i];
-        }
-        
+
         return totalCandies;
     }
 }
