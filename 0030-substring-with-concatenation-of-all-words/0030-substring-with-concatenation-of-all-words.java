@@ -9,26 +9,29 @@ class Solution {
         int numWords = words.length;
         int wordLen = words[0].length();
         int totalLen = numWords * wordLen;
+
         if (n < totalLen) return result;
 
         // Step 1: Map each unique word string to a small unique primitive integer ID
         Map<String, Integer> wordToId = new HashMap<>();
-        int[] targetFreq = new int[words.length]; // Freq map indexed by Word ID
         int uniqueIdCounter = 0;
 
         for (String word : words) {
-            Integer id = wordToId.get(word);
-            if (id == null) {
-                id = uniqueIdCounter++;
-                wordToId.put(word, id);
+            if (!wordToId.containsKey(word)) {
+                wordToId.put(word, uniqueIdCounter++);
             }
-            targetFreq[id]++;
         }
 
-        // Step 2: Pre-convert string s into an integer ID array to eliminate substring creation inside the loops
+        // Frequency of each word ID in the target dictionary
+        int[] targetFreq = new int[uniqueIdCounter];
+        for (String word : words) {
+            targetFreq[wordToId.get(word)]++;
+        }
+
+        // Step 2: Pre-convert string s into an integer ID array
         int[] sIds = new int[n - wordLen + 1];
-        Arrays.fill(sIds, -1); // -1 means no valid word from the dictionary starts here
-        
+        Arrays.fill(sIds, -1);
+
         for (int i = 0; i <= n - wordLen; i++) {
             String sub = s.substring(i, i + wordLen);
             Integer id = wordToId.get(sub);
@@ -37,15 +40,16 @@ class Solution {
             }
         }
 
-        // Reusable current window frequency tracking array to avoid object recreation
+        // Reusable frequency array for the current sliding window
         int[] currentFreq = new int[uniqueIdCounter];
 
-        // Step 3: Run the sliding window over the primitive int array across offsets
+        // Step 3: Sliding window across each possible offset
         for (int i = 0; i < wordLen; i++) {
             int left = i;
             int right = i;
             int count = 0;
-            Arrays.fill(currentFreq, 0); // Reset tracking array for this offset branch
+
+            Arrays.fill(currentFreq, 0);
 
             while (right + wordLen <= n) {
                 int id = sIds[right];
@@ -55,7 +59,7 @@ class Solution {
                     currentFreq[id]++;
                     count++;
 
-                    // If the word count exceeds the dictionary allocation rule, shrink left
+                    // Too many occurrences of this word -> shrink window
                     while (currentFreq[id] > targetFreq[id]) {
                         int leftId = sIds[left];
                         currentFreq[leftId]--;
@@ -63,12 +67,18 @@ class Solution {
                         left += wordLen;
                     }
 
-                    // Complete block sequence matched successfully
+                    // Found a valid concatenation
                     if (count == numWords) {
                         result.add(left);
+
+                        // Immediately slide the window forward by one word
+                        int leftId = sIds[left];
+                        currentFreq[leftId]--;
+                        count--;
+                        left += wordLen;
                     }
                 } else {
-                    // Invalid chunk sequence hit: instantly wipe records and advance left window bound
+                    // Invalid word encountered -> reset window
                     if (count > 0) {
                         Arrays.fill(currentFreq, 0);
                         count = 0;
