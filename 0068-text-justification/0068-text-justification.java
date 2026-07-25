@@ -7,61 +7,71 @@ class Solution {
         int n = words.length;
         int left = 0;
         
+        // Reusable character buffer to build each line instantly without allocations
+        char[] buffer = new char[maxWidth];
+        
         while (left < n) {
             int right = left + 1;
-            int lineWordsLength = words[left].length();
+            int wordsLength = words[left].length();
             
-            // Step 1: Pack as many words as possible into the current line greedily
-            while (right < n && lineWordsLength + 1 + words[right].length() <= maxWidth) {
-                lineWordsLength += 1 + words[right].length();
+            // Greedily find how many words fit on this line
+            while (right < n && wordsLength + 1 + words[right].length() <= maxWidth) {
+                wordsLength += 1 + words[right].length();
                 right++;
             }
             
-            StringBuilder line = new StringBuilder();
             int numWords = right - left;
+            int bufferPtr = 0;
             
-            // Step 2: Handle Left-Justification (Last line or line with only 1 word)
+            // Case 1: Left-justified line (Last line or a line with a single word)
             if (right == n || numWords == 1) {
                 for (int i = left; i < right; i++) {
-                    line.append(words[i]);
+                    String word = words[i];
+                    int len = word.length();
+                    word.getChars(0, len, buffer, bufferPtr);
+                    bufferPtr += len;
+                    
                     if (i < right - 1) {
-                        line.append(" ");
+                        buffer[bufferPtr++] = ' ';
                     }
                 }
-                // Pad trailing spaces until maxWidth is reached
-                while (line.length() < maxWidth) {
-                    line.append(" ");
+                // Pad remaining trailing slots with spaces
+                while (bufferPtr < maxWidth) {
+                    buffer[bufferPtr++] = ' ';
                 }
             } 
-            // Step 3: Handle Full-Justification (Standard middle lines)
+            // Case 2: Fully-justified line
             else {
-                // Calculate pure total text length excluding the tracking space padding
-                int wordsActualLength = 0;
+                int actualWordsLength = 0;
                 for (int i = left; i < right; i++) {
-                    wordsActualLength += words[i].length();
+                    actualWordsLength += words[i].length();
                 }
                 
-                int totalSpaces = maxWidth - wordsActualLength;
+                int totalSpaces = maxWidth - actualWordsLength;
                 int gaps = numWords - 1;
                 
                 int baseSpaces = totalSpaces / gaps;
-                int remainderSpaces = totalSpaces % gaps;
+                int extraSpaces = totalSpaces % gaps;
                 
                 for (int i = left; i < right; i++) {
-                    line.append(words[i]);
+                    String word = words[i];
+                    int len = word.length();
+                    word.getChars(0, len, buffer, bufferPtr);
+                    bufferPtr += len;
                     
-                    // Do not append trailing spaces after the final word of the line
+                    // Add spaces if it's not the last word in the line
                     if (i < right - 1) {
-                        int spacesToAppend = baseSpaces + (i - left < remainderSpaces ? 1 : 0);
+                        int spacesToAppend = baseSpaces + (i - left < extraSpaces ? 1 : 0);
                         for (int s = 0; s < spacesToAppend; s++) {
-                            line.append(" ");
+                            buffer[bufferPtr++] = ' ';
                         }
                     }
                 }
             }
             
-            result.add(line.toString());
-            left = right; // Slide pointer to begin the next line chunk
+            // Instantly create the String from the filled character array bounds
+            result.add(new String(buffer, 0, maxWidth));
+            left = right;
         }
         
         return result;
