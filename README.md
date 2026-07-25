@@ -16,6 +16,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 | [0026-remove-duplicates-from-sorted-array](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0026-remove-duplicates-from-sorted-array) |
 | [0027-remove-element](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0027-remove-element) |
 | [0036-valid-sudoku](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0036-valid-sudoku) |
+| [0042-trapping-rain-water](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0042-trapping-rain-water) |
 | [0045-jump-game-ii](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0045-jump-game-ii) |
 | [0048-rotate-image](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0048-rotate-image) |
 | [0054-spiral-matrix](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0054-spiral-matrix) |
@@ -168,6 +169,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 | [0026-remove-duplicates-from-sorted-array](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0026-remove-duplicates-from-sorted-array) |
 | [0027-remove-element](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0027-remove-element) |
 | [0028-find-the-index-of-the-first-occurrence-in-a-string](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0028-find-the-index-of-the-first-occurrence-in-a-string) |
+| [0042-trapping-rain-water](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0042-trapping-rain-water) |
 | [0080-remove-duplicates-from-sorted-array-ii](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0080-remove-duplicates-from-sorted-array-ii) |
 | [0088-merge-sorted-array](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0088-merge-sorted-array) |
 | [0125-valid-palindrome](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0125-valid-palindrome) |
@@ -182,6 +184,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 | [0005-longest-palindromic-substring](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0005-longest-palindromic-substring) |
 | [0010-regular-expression-matching](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0010-regular-expression-matching) |
 | [0022-generate-parentheses](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0022-generate-parentheses) |
+| [0042-trapping-rain-water](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0042-trapping-rain-water) |
 | [0045-jump-game-ii](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0045-jump-game-ii) |
 | [0055-jump-game](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0055-jump-game) |
 | [0070-climbing-stairs](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0070-climbing-stairs) |
@@ -282,6 +285,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 |  |
 | ------- |
 | [0020-valid-parentheses](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0020-valid-parentheses) |
+| [0042-trapping-rain-water](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0042-trapping-rain-water) |
 | [1081-smallest-subsequence-of-distinct-characters](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/1081-smallest-subsequence-of-distinct-characters) |
 ## Topological Sort
 |  |
@@ -338,6 +342,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 ## Monotonic Stack
 |  |
 | ------- |
+| [0042-trapping-rain-water](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0042-trapping-rain-water) |
 | [1081-smallest-subsequence-of-distinct-characters](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/1081-smallest-subsequence-of-distinct-characters) |
 ## String Matching
 |  |
