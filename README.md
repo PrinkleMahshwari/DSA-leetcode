@@ -21,6 +21,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 | [0048-rotate-image](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0048-rotate-image) |
 | [0054-spiral-matrix](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0054-spiral-matrix) |
 | [0055-jump-game](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0055-jump-game) |
+| [0068-text-justification](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0068-text-justification) |
 | [0073-set-matrix-zeroes](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0073-set-matrix-zeroes) |
 | [0080-remove-duplicates-from-sorted-array-ii](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0080-remove-duplicates-from-sorted-array-ii) |
 | [0088-merge-sorted-array](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0088-merge-sorted-array) |
@@ -124,6 +125,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 | [0022-generate-parentheses](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0022-generate-parentheses) |
 | [0028-find-the-index-of-the-first-occurrence-in-a-string](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0028-find-the-index-of-the-first-occurrence-in-a-string) |
 | [0058-length-of-last-word](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0058-length-of-last-word) |
+| [0068-text-justification](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0068-text-justification) |
 | [0125-valid-palindrome](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0125-valid-palindrome) |
 | [0139-word-break](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0139-word-break) |
 | [0151-reverse-words-in-a-string](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0151-reverse-words-in-a-string) |
@@ -329,6 +331,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 |  |
 | ------- |
 | [0054-spiral-matrix](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0054-spiral-matrix) |
+| [0068-text-justification](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0068-text-justification) |
 | [0289-game-of-life](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0289-game-of-life) |
 | [1260-shift-2d-grid](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/1260-shift-2d-grid) |
 | [3867-sum-of-gcd-of-formed-pairs](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/3867-sum-of-gcd-of-formed-pairs) |
