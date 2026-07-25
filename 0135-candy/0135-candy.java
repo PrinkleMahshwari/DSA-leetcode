@@ -1,3 +1,5 @@
+import java.util.*;
+
 class Solution {
 
     public int candy(int[] ratings) {
@@ -7,44 +9,37 @@ class Solution {
         if (n <= 1)
             return n;
 
-        int totalCandies = 1;
+        int[] candies = new int[n];
 
-        int up = 0;      // length of current increasing slope
-        int down = 0;    // length of current decreasing slope
-        int peak = 0;    // length of the last increasing slope
+        // first child always gets one candy
+        candies[0] = 1;
 
+        // pass 1: satisfy the left neighbor constraint
         for (int i = 1; i < n; i++) {
 
-            // increasing slope
             if (ratings[i] > ratings[i - 1]) {
-                up++;
-                peak = up;
-                down = 0;
+                candies[i] = candies[i - 1] + 1;
+            } else {
+                // every child must receive at least one candy
+                candies[i] = 1;
+            }
+        }
 
-                totalCandies += (up + 1);
+        // initialize answer with the last child's candies
+        int totalCandies = candies[n - 1];
+
+        // pass 2: satisfy the right neighbor constraint while preserving
+        // any larger value assigned during the first pass
+        for (int i = n - 2; i >= 0; i--) {
+
+            if (ratings[i] > ratings[i + 1]) {
+                candies[i] = Math.max(
+                    candies[i],
+                    candies[i + 1] + 1
+                );
             }
 
-            // flat slope
-            else if (ratings[i] == ratings[i - 1]) {
-                up = 0;
-                down = 0;
-                peak = 0;
-
-                totalCandies += 1;
-            }
-
-            // decreasing slope
-            else {
-                up = 0;
-                down++;
-
-                totalCandies += down;
-
-                // if decreasing length exceeds previous peak,
-                // peak child needs one extra candy
-                if (down > peak)
-                    totalCandies++;
-            }
+            totalCandies += candies[i];
         }
 
         return totalCandies;
