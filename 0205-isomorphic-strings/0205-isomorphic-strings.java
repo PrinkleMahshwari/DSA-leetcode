@@ -1,40 +1,25 @@
-import java.util.HashMap;
-import java.util.Map;
-
 class Solution {
     public boolean isIsomorphic(String s, String t) {
-        // Edge check: strings must be of identical length (handled by constraints but safe)
-        if (s.length() != t.length()) {
-            return false;
-        }
-
-        // Two maps to ensure a unique one-to-one (bijective) relationship
-        Map<Character, Character> mapS = new HashMap<>();
-        Map<Character, Character> mapT = new HashMap<>();
-
-        for (int i = 0; i < s.length(); i++) {
+        int len = s.length();
+        
+        // Fast array buffers tracking the last-seen 1-based index position of characters
+        int[] mapS = new int[256];
+        int[] mapT = new int[256];
+        
+        for (int i = 0; i < len; i++) {
             char charS = s.charAt(i);
             char charT = t.charAt(i);
-
-            // Check s -> t mapping consistency
-            if (mapS.containsKey(charS)) {
-                if (mapS.get(charS) != charT) {
-                    return false;
-                }
-            } else {
-                mapS.put(charS, charT);
+            
+            // If their previous structural occurrences don't match, they aren't isomorphic
+            if (mapS[charS] != mapT[charT]) {
+                return false;
             }
-
-            // Check t -> s mapping consistency
-            if (mapT.containsKey(charT)) {
-                if (mapT.get(charT) != charS) {
-                    return false;
-                }
-            } else {
-                mapT.put(charT, charS);
-            }
+            
+            // Record current position using 1-based indexing (reserving 0 for default/unseen)
+            mapS[charS] = i + 1;
+            mapT[charT] = i + 1;
         }
-
+        
         return true;
     }
 }
