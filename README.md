@@ -73,6 +73,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 | [0139-word-break](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0139-word-break) |
 | [0169-majority-element](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0169-majority-element) |
 | [0205-isomorphic-strings](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0205-isomorphic-strings) |
+| [0242-valid-anagram](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0242-valid-anagram) |
 | [0290-word-pattern](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0290-word-pattern) |
 | [0380-insert-delete-getrandom-o1](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0380-insert-delete-getrandom-o1) |
 | [0383-ransom-note](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0383-ransom-note) |
@@ -137,6 +138,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 | [0139-word-break](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0139-word-break) |
 | [0151-reverse-words-in-a-string](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0151-reverse-words-in-a-string) |
 | [0205-isomorphic-strings](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0205-isomorphic-strings) |
+| [0242-valid-anagram](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0242-valid-anagram) |
 | [0290-word-pattern](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0290-word-pattern) |
 | [0383-ransom-note](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0383-ransom-note) |
 | [0392-is-subsequence](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0392-is-subsequence) |
@@ -238,6 +240,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 | [0018-4sum](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0018-4sum) |
 | [0088-merge-sorted-array](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0088-merge-sorted-array) |
 | [0169-majority-element](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0169-majority-element) |
+| [0242-valid-anagram](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0242-valid-anagram) |
 | [0274-h-index](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0274-h-index) |
 | [0628-maximum-product-of-three-numbers](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0628-maximum-product-of-three-numbers) |
 | [1288-remove-covered-intervals](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/1288-remove-covered-intervals) |
