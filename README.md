@@ -72,6 +72,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 | [0073-set-matrix-zeroes](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0073-set-matrix-zeroes) |
 | [0139-word-break](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0139-word-break) |
 | [0169-majority-element](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0169-majority-element) |
+| [0205-isomorphic-strings](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0205-isomorphic-strings) |
 | [0380-insert-delete-getrandom-o1](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0380-insert-delete-getrandom-o1) |
 | [0383-ransom-note](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0383-ransom-note) |
 | [1331-rank-transform-of-an-array](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/1331-rank-transform-of-an-array) |
@@ -134,6 +135,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 | [0125-valid-palindrome](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0125-valid-palindrome) |
 | [0139-word-break](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0139-word-break) |
 | [0151-reverse-words-in-a-string](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0151-reverse-words-in-a-string) |
+| [0205-isomorphic-strings](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0205-isomorphic-strings) |
 | [0383-ransom-note](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0383-ransom-note) |
 | [0392-is-subsequence](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0392-is-subsequence) |
 | [1081-smallest-subsequence-of-distinct-characters](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/1081-smallest-subsequence-of-distinct-characters) |
