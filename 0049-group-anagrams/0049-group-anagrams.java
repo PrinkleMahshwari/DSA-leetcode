@@ -6,28 +6,19 @@ class Solution {
             return new ArrayList<>();
         }
         
-        Map<String, List<String>> anagramGroups = new HashMap<>();
+        // Use a map with a tight initial capacity layout to avoid internal rehashing buckets
+        Map<String, List<String>> anagramGroups = new HashMap<>(strs.length);
         
         for (String str : strs) {
-            // Allocate a fast primitive frequency counter for lowercase letters
-            int[] counts = new int[26];
-            int len = str.length();
-            for (int i = 0; i < len; i++) {
-                counts[str.charAt(i) - 'a']++;
-            }
+            // Convert to primitive char array for native memory sorting operations
+            char[] chars = str.toCharArray();
+            Arrays.sort(chars);
             
-            // Build a unique, deterministic string signature key
-            StringBuilder sb = new StringBuilder();
-            for (int count : counts) {
-                sb.append('#').append(count);
-            }
-            String key = sb.toString();
+            // Re-wrap the sorted primitive array directly as our tracking key string
+            String key = new String(chars);
             
-            // Group the original word string under its character layout footprint
-            if (!anagramGroups.containsKey(key)) {
-                anagramGroups.put(key, new ArrayList<>());
-            }
-            anagramGroups.get(key).add(str);
+            // Retrieve or create the grouping array list using Java 8 computeIfAbsent
+            anagramGroups.computeIfAbsent(key, k -> new ArrayList<>()).add(str);
         }
         
         return new ArrayList<>(anagramGroups.values());
