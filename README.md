@@ -28,6 +28,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 | [0088-merge-sorted-array](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0088-merge-sorted-array) |
 | [0121-best-time-to-buy-and-sell-stock](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0121-best-time-to-buy-and-sell-stock) |
 | [0122-best-time-to-buy-and-sell-stock-ii](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0122-best-time-to-buy-and-sell-stock-ii) |
+| [0128-longest-consecutive-sequence](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0128-longest-consecutive-sequence) |
 | [0134-gas-station](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0134-gas-station) |
 | [0135-candy](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0135-candy) |
 | [0139-word-break](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0139-word-break) |
@@ -75,6 +76,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 | [0049-group-anagrams](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0049-group-anagrams) |
 | [0073-set-matrix-zeroes](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0073-set-matrix-zeroes) |
 | [0076-minimum-window-substring](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0076-minimum-window-substring) |
+| [0128-longest-consecutive-sequence](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0128-longest-consecutive-sequence) |
 | [0139-word-break](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0139-word-break) |
 | [0169-majority-element](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0169-majority-element) |
 | [0202-happy-number](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0202-happy-number) |
@@ -274,6 +276,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 ## Union-Find
 |  |
 | ------- |
+| [0128-longest-consecutive-sequence](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0128-longest-consecutive-sequence) |
 | [2492-minimum-score-of-a-path-between-two-cities](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/2492-minimum-score-of-a-path-between-two-cities) |
 | [2685-count-the-number-of-complete-components](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/2685-count-the-number-of-complete-components) |
 | [2812-find-the-safest-path-in-a-grid](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/2812-find-the-safest-path-in-a-grid) |
