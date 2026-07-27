@@ -76,6 +76,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 | [0076-minimum-window-substring](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0076-minimum-window-substring) |
 | [0139-word-break](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0139-word-break) |
 | [0169-majority-element](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0169-majority-element) |
+| [0202-happy-number](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0202-happy-number) |
 | [0205-isomorphic-strings](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0205-isomorphic-strings) |
 | [0242-valid-anagram](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0242-valid-anagram) |
 | [0290-word-pattern](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0290-word-pattern) |
@@ -102,6 +103,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 | [0048-rotate-image](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0048-rotate-image) |
 | [0070-climbing-stairs](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0070-climbing-stairs) |
 | [0189-rotate-array](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0189-rotate-array) |
+| [0202-happy-number](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0202-happy-number) |
 | [0380-insert-delete-getrandom-o1](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0380-insert-delete-getrandom-o1) |
 | [0628-maximum-product-of-three-numbers](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0628-maximum-product-of-three-numbers) |
 | [1979-find-greatest-common-divisor-of-array](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/1979-find-greatest-common-divisor-of-array) |
@@ -199,6 +201,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 | [0151-reverse-words-in-a-string](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0151-reverse-words-in-a-string) |
 | [0167-two-sum-ii-input-array-is-sorted](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0167-two-sum-ii-input-array-is-sorted) |
 | [0189-rotate-array](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0189-rotate-array) |
+| [0202-happy-number](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0202-happy-number) |
 | [0392-is-subsequence](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0392-is-subsequence) |
 | [3534-path-existence-queries-in-a-graph-ii](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/3534-path-existence-queries-in-a-graph-ii) |
 | [3867-sum-of-gcd-of-formed-pairs](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/3867-sum-of-gcd-of-formed-pairs) |
