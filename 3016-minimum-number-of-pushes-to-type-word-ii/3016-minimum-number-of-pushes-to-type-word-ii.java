@@ -1,39 +1,33 @@
+import java.util.Arrays;
+
 class Solution {
     public int minimumPushes(String word) {
-
-        // count frequency of each letter, only 26 possible so a fixed-size
-        // array beats any map-based structure
         int[] freq = new int[26];
-        for (char c : word.toCharArray()) {
-            freq[c - 'a']++;
+        int len = word.length();
+        
+        // FIX 1: Direct character scanning via charAt() to bypass heap allocation
+        for (int i = 0; i < len; i++) {
+            freq[word.charAt(i) - 'a']++;
         }
 
-        // counting sort by frequency instead of Arrays.sort/boxing: frequencies
-        // are bounded by word.length(), so bucket them directly -- O(n) instead
-        // of O(26 log 26) (negligible either way at 26 elements, but this
-        // avoids Integer boxing entirely)
-        int n = word.length();
-        int[] freqBucket = new int[n + 1];
-        for (int f : freq) {
-            if (f > 0) freqBucket[f]++;
-        }
+        // FIX 2: Fast primitive sort on the fixed 26-slot stack boundaries
+        Arrays.sort(freq);
 
-        // greedily assign the highest frequencies first to the earliest
-        // (cheapest) push-count tiers: 8 letters get 1 push, next 8 get 2
-        // pushes, next 8 get 3 pushes, next 2 get 4 pushes (8+8+8+2=26)
-        long totalPushes = 0;
-        int lettersAssigned = 0;
+        int totalPushes = 0;
+        int keyIndex = 0;
 
-        for (int f = n; f >= 1; f--) {
-            int count = freqBucket[f];
-            while (count > 0) {
-                int pushCost = (lettersAssigned / 8) + 1;
-                totalPushes += (long) pushCost * f;
-                lettersAssigned++;
-                count--;
+        // Step 3: Scan backwards (highest frequencies first) to assign push costs
+        for (int i = 25; i >= 0; i--) {
+            if (freq[i] == 0) {
+                break; // Stop immediately once all existing characters are processed
             }
+            
+            // Push cost: first 8 get 1 push, next 8 get 2 pushes, etc.
+            int pushCost = (keyIndex / 8) + 1;
+            totalPushes += freq[i] * pushCost;
+            keyIndex++;
         }
 
-        return (int) totalPushes;
+        return totalPushes;
     }
 }
