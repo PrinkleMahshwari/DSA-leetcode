@@ -450,4 +450,8 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 |  |
 | ------- |
 | [1406-stone-game-iii](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/1406-stone-game-iii) |
+## Database
+|  |
+| ------- |
+| [0175-combine-two-tables](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0175-combine-two-tables) |
 <!---LeetCode Topics End-->
