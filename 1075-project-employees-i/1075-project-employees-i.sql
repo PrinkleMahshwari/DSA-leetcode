@@ -1,7 +1,7 @@
 # Write your MySQL query statement below
-SELECT
+SELECT 
     project_id,
-    ROUND(SUM(experience_years) / COUNT(employee_id), 2) AS average_years
+    ROUND(AVG(experience_years), 2) AS average_years
 FROM Project
-JOIN Employee USING (employee_id)
+STRAIGHT_JOIN Employee USING (employee_id)
 GROUP BY project_id;
