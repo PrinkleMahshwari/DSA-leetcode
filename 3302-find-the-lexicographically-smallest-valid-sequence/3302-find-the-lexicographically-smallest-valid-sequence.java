@@ -1,46 +1,49 @@
 class Solution {
     public int[] validSequence(String word1, String word2) {
-        
         int n = word1.length();
         int m = word2.length();
 
-        int[] dp = new int[n + 1];
-        // build dp from right to left
-        for (int i = n - 1; i >= 0; i--) {
-            dp[i] = dp[i + 1]; // dp[i + 1] tells us how many characters from the END of word2 already matched
+        char[] w1 = word1.toCharArray();
+        char[] w2 = word2.toCharArray();
 
-            // word2[m - dp[i + 1] - 1] is the next required character
-            if (dp[i + 1] < m && word1.charAt(i) == word2.charAt(m - dp[i + 1] - 1))
-                dp[i]++;
-            
-        }
-
-        // Greedily construct the answer from left to right
-        int[] answer = new int[m];
-
-        int j = 0; // current position in word2
-        boolean changed = false; // have we already used our one mismatch?
-        int size = 0; 
-
-        for (int i = 0; i < n && j < m; i++) {
-            // case 1: current character already matches word2[j] taking this index is always optimal beacause we want the lexicographically smallest index sequence
-            if (word1.charAt(i) == word2.charAt(j)) {
-                answer[size++] = i;
-                j++;
-            }
-
-            // Case 2: characters don't match we may use this position as ONE allowed matc, but only if the remaining part of word2 can be matched from word[i + 1 ...]
-            else if (!changed && dp[i + 1] >= m - j - 1) {
-                answer[size++] = i;
-                j++;
-                changed = true;
-            }
-        }
-
-        // if we don't select m indices, no valid sequence exists
-        if (size != m) 
-            return new int[0];
+        // suffixLen[i] represents the maximum length of a suffix of word2 
+        // that can be formed using characters from word1 starting from index i.
+        int[] suffixLen = new int[n + 1];
         
+        int j = m - 1;
+        for (int i = n - 1; i >= 0; i--) {
+            suffixLen[i] = suffixLen[i + 1];
+            if (j >= 0 && w1[i] == w2[j]) {
+                suffixLen[i]++;
+                j--;
+            }
+        }
+
+        int[] answer = new int[m];
+        int w2Idx = 0; // tracking pointer inside word2
+        boolean changed = false; // flag indicating if the single modification was consumed
+
+        for (int i = 0; i < n && w2Idx < m; i++) {
+            // Case 1: The current characters match perfectly
+            if (w1[i] == w2[w2Idx]) {
+                answer[w2Idx] = i;
+                w2Idx++;
+            } 
+            // Case 2: Mismatch, but we haven't changed a character yet.
+            // Check if the rest of word2 (which has a length of m - w2Idx - 1) 
+            // can be completely formed from word1 starting strictly from index i + 1.
+            else if (!changed && suffixLen[i + 1] >= (m - w2Idx - 1)) {
+                answer[w2Idx] = i;
+                w2Idx++;
+                changed = true; // consume the mutation slot
+            }
+        }
+
+        // If the pointer did not fully process word2, no valid configuration exists
+        if (w2Idx < m) {
+            return new int[0];
+        }
+
         return answer;
     }
 }
