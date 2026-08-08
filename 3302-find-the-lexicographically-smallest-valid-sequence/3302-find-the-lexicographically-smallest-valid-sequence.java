@@ -3,23 +3,19 @@ class Solution {
         int n = word1.length();
         int m = word2.length();
 
-        char[] w1 = word1.toCharArray();
-        char[] w2 = word2.toCharArray();
-
-        // Memory Optimized: Size m array instead of size n.
-        // lastValidW1Idx[j] stores the LARGEST index in word1 
-        // that can successfully match the character word2[j] 
-        // while safely completing the valid suffix from j to m-1.
+        // Memory Fix: Avoid duplicating heavy strings as primitive arrays.
+        // We use an int array of size m, which uses minimal memory space.
         int[] lastValidW1Idx = new int[m];
         
-        // Initialize with an invalid flag state
+        // Inline fill to avoid array mutation overhead
         for (int i = 0; i < m; i++) {
             lastValidW1Idx[i] = -1;
         }
 
         int j = m - 1;
         for (int i = n - 1; i >= 0; i--) {
-            if (j >= 0 && w1[i] == w2[j]) {
+            // Using .charAt directly skips memory allocation overhead
+            if (j >= 0 && word1.charAt(i) == word2.charAt(j)) {
                 lastValidW1Idx[j] = i;
                 j--;
             }
@@ -30,14 +26,15 @@ class Solution {
         boolean changed = false; 
 
         for (int i = 0; i < n && w2Idx < m; i++) {
-            // Case 1: Fast direct character match
-            if (w1[i] == w2[w2Idx]) {
+            char c1 = word1.charAt(i);
+            char c2 = word2.charAt(w2Idx);
+
+            // Case 1: Matching character configuration
+            if (c1 == c2) {
                 answer[w2Idx] = i;
                 w2Idx++;
             } 
-            // Case 2: Mismatch mutation option.
-            // If it's the last character of word2, it's always safe to change.
-            // Otherwise, verify if the next suffix (w2Idx + 1) can start strictly after index i.
+            // Case 2: Mutation substitution condition
             else if (!changed && (w2Idx == m - 1 || (lastValidW1Idx[w2Idx + 1] != -1 && lastValidW1Idx[w2Idx + 1] > i))) {
                 answer[w2Idx] = i;
                 w2Idx++;
@@ -45,7 +42,6 @@ class Solution {
             }
         }
 
-        // If the pointer did not fully finish word2, no valid sequence exists
         if (w2Idx < m) {
             return new int[0];
         }
