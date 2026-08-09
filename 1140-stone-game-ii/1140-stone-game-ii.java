@@ -11,7 +11,7 @@ class Solution {
         dp = new int[n][n + 1];
         suffix = new int[n + 1];
 
-        // suffix[i] = sum of piles[i ... n - 1]
+        // suffix[i] = sum of piles[i ... n - 1];
         for (int i = n - 1; i >= 0; i--)
             suffix[i] = suffix[i + 1] + piles[i];
         
@@ -32,10 +32,10 @@ class Solution {
             return dp[i][m];
         
         int best = 0;
-        
+
         for (int x = 1; x <= 2 * m; x++) {
 
-            int nextM = Math.max(m, x);
+            int nextM = Math.max(m,x);
 
             int opponent = solve(i + x, nextM);
 
