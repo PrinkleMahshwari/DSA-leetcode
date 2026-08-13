@@ -1,124 +1,117 @@
 class Solution {
+    // Parallel arrays to completely eliminate Node objects and flatten the memory footprint
+    private char[] leftChar;
+    private char[] rightChar;
+    private int[] prefix;
+    private int[] suffix;
+    private int[] max;
+    private int[] length;
 
-    static class Node {
-        char leftChar;
-        char rightChar;
-
-        int prefix;
-        int suffix;
-        int max;
-        int length;
-
-        Node(char c) {
-            leftChar = c;
-            rightChar = c;
-            prefix = 1;
-            suffix = 1;
-            max = 1;
-            length = 1;
-        }
-    }
-
-    Node[] tree;
-
-    public int[] longestRepeating(
-            String s,
-            String queryCharacters,
-            int[] queryIndices) {
-
+    public int[] longestRepeating(String s, String queryCharacters, int[] queryIndices) {
         int n = s.length();
         int k = queryIndices.length;
 
-        tree = new Node[4 * n];
+        // Using exactly 4 * n elements for flat, cache-friendly primitive segment tree representation
+        int treeSize = 4 * n;
+        leftChar = new char[treeSize];
+        rightChar = new char[treeSize];
+        prefix = new int[treeSize];
+        suffix = new int[treeSize];
+        max = new int[treeSize];
+        length = new int[treeSize];
 
-        build(1, 0, n - 1, s);
+        // Avoid repeated string extraction wrappers in inner hot loops
+        char[] sArr = s.toCharArray();
+        char[] qChars = queryCharacters.toCharArray();
+
+        build(1, 0, n - 1, sArr);
 
         int[] answer = new int[k];
-
         for (int i = 0; i < k; i++) {
-
-            int index = queryIndices[i];
-            char ch = queryCharacters.charAt(i);
-
-            update(1, 0, n - 1, index, ch);
-
-            answer[i] = tree[1].max;
+            update(1, 0, n - 1, queryIndices[i], qChars[i]);
+            answer[i] = max[1]; // The global maximum answer is always stored at root node index 1
         }
 
         return answer;
     }
 
-    private void build(int node, int left, int right, String s) {
-
+    private void build(int node, int left, int right, char[] s) {
         if (left == right) {
-            tree[node] = new Node(s.charAt(left));
+            initLeaf(node, s[left]);
             return;
         }
 
         int mid = left + (right - left) / 2;
+        int leftChild = node << 1;       // Optimized bitwise left-shift (node * 2)
+        int rightChild = leftChild | 1;   // Optimized bitwise bit-or (node * 2 + 1)
 
-        build(node * 2, left, mid, s);
-        build(node * 2 + 1, mid + 1, right, s);
+        build(leftChild, left, mid, s);
+        build(rightChild, mid + 1, right, s);
 
-        tree[node] = merge(tree[node * 2], tree[node * 2 + 1]);
+        merge(node, leftChild, rightChild);
     }
 
-    private void update(
-            int node,
-            int left,
-            int right,
-            int index,
-            char ch) {
-
+    private void update(int node, int left, int right, int index, char ch) {
         if (left == right) {
-            tree[node] = new Node(ch);
+            initLeaf(node, ch);
             return;
         }
 
         int mid = left + (right - left) / 2;
+        int leftChild = node << 1;
+        int rightChild = leftChild | 1;
 
         if (index <= mid) {
-            update(node * 2, left, mid, index, ch);
+            update(leftChild, left, mid, index, ch);
         } else {
-            update(node * 2 + 1, mid + 1, right, index, ch);
+            update(rightChild, mid + 1, right, index, ch);
         }
 
-        tree[node] = merge(tree[node * 2], tree[node * 2 + 1]);
+        merge(node, leftChild, rightChild);
     }
 
-    private Node merge(Node a, Node b) {
+    // Inline leaf node initialization to prevent any object/variable allocation footprint
+    private void initLeaf(int node, char c) {
+        leftChar[node] = c;
+        rightChar[node] = c;
+        prefix[node] = 1;
+        suffix[node] = 1;
+        max[node] = 1;
+        length[node] = 1;
+    }
 
-        Node res = new Node(a.leftChar);
+    // In-place primitive merging to avoid generating temporary object churn
+    private void merge(int parent, int a, int b) {
+        leftChar[parent] = leftChar[a];
+        rightChar[parent] = rightChar[b];
+        length[parent] = length[a] + length[b];
 
-        res.leftChar = a.leftChar;
-        res.rightChar = b.rightChar;
-
-        res.length = a.length + b.length;
-
-        // Prefix
-        res.prefix = a.prefix;
-
-        if (a.prefix == a.length && a.rightChar == b.leftChar) {
-            res.prefix = a.length + b.prefix;
+        // Merge Prefix
+        int aLen = length[a];
+        int aPrefix = prefix[a];
+        if (aPrefix == aLen && rightChar[a] == leftChar[b]) {
+            prefix[parent] = aLen + prefix[b];
+        } else {
+            prefix[parent] = aPrefix;
         }
 
-        // Suffix
-        res.suffix = b.suffix;
-
-        if (b.suffix == b.length && a.rightChar == b.leftChar) {
-            res.suffix = b.length + a.suffix;
+        // Merge Suffix
+        int bLen = length[b];
+        int bSuffix = suffix[b];
+        if (bSuffix == bLen && rightChar[a] == leftChar[b]) {
+            suffix[parent] = bLen + suffix[a];
+        } else {
+            suffix[parent] = bSuffix;
         }
 
-        // Maximum
-        res.max = Math.max(a.max, b.max);
-
-        if (a.rightChar == b.leftChar) {
-            res.max = Math.max(
-                res.max,
-                a.suffix + b.prefix
-            );
+        // Merge Maximum
+        int maxVal = max[a] > max[b] ? max[a] : max[b];
+        if (rightChar[a] == leftChar[b]) {
+            int combo = suffix[a] + prefix[b];
+            if (combo > maxVal) {
+                maxVal = combo;
+            }
         }
-
-        return res;
+        max[parent] = maxVal;
     }
 }
