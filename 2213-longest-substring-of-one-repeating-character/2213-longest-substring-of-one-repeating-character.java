@@ -1,5 +1,5 @@
 class Solution {
-    // Parallel arrays to completely eliminate Node objects and flatten the memory footprint
+    // Highly efficient primitive parallel arrays to eliminate node object overhead entirely
     private char[] leftChar;
     private char[] rightChar;
     private int[] prefix;
@@ -7,11 +7,14 @@ class Solution {
     private int[] max;
     private int[] length;
 
+    // Cache the structural tree index maps for direct bottom-up updates
+    private int[] leafNodeMap;
+
     public int[] longestRepeating(String s, String queryCharacters, int[] queryIndices) {
         int n = s.length();
         int k = queryIndices.length;
 
-        // Using exactly 4 * n elements for flat, cache-friendly primitive segment tree representation
+        // Perfectly balanced 4 * n flattened representation
         int treeSize = 4 * n;
         leftChar = new char[treeSize];
         rightChar = new char[treeSize];
@@ -19,8 +22,10 @@ class Solution {
         suffix = new int[treeSize];
         max = new int[treeSize];
         length = new int[treeSize];
+        
+        // Map string positions to their exact segment tree leaf node indices
+        leafNodeMap = new int[n];
 
-        // Avoid repeated string extraction wrappers in inner hot loops
         char[] sArr = s.toCharArray();
         char[] qChars = queryCharacters.toCharArray();
 
@@ -28,32 +33,67 @@ class Solution {
 
         int[] answer = new int[k];
         for (int i = 0; i < k; i++) {
-            update(1, 0, n - 1, queryIndices[i], qChars[i]);
-            answer[i] = max[1]; // The global maximum answer is always stored at root node index 1
+            // Retrieve leaf index in O(1) time and look upward immediately
+            int node = leafNodeMap[queryIndices[i]];
+            char ch = qChars[i];
+
+            leftChar[node] = ch;
+            rightChar[node] = ch;
+
+            // Shift straight up to update parent associations
+            node >>= 1;
+            while (node > 0) {
+                int leftChild = node << 1;
+                int rightChild = leftChild | 1;
+
+                leftChar[node] = leftChar[leftChild];
+                rightChar[node] = rightChar[rightChild];
+
+                // Merge Prefix state properties
+                int aLen = length[leftChild];
+                if (prefix[leftChild] == aLen && rightChar[leftChild] == leftChar[rightChild]) {
+                    prefix[node] = aLen + prefix[rightChild];
+                } else {
+                    prefix[node] = prefix[leftChild];
+                }
+
+                // Merge Suffix state properties
+                int bLen = length[rightChild];
+                if (suffix[rightChild] == bLen && rightChar[leftChild] == leftChar[rightChild]) {
+                    suffix[node] = bLen + suffix[leftChild];
+                } else {
+                    suffix[node] = suffix[rightChild];
+                }
+
+                // Calculate current branch maximum
+                int maxVal = max[leftChild] > max[rightChild] ? max[leftChild] : max[rightChild];
+                if (rightChar[leftChild] == leftChar[rightChild]) {
+                    int combo = suffix[leftChild] + prefix[rightChild];
+                    if (combo > maxVal) {
+                        maxVal = combo;
+                    }
+                }
+                max[node] = maxVal;
+
+                node >>= 1; // Bitwise shift to ascend to the next parent layer
+            }
+
+            answer[i] = max[1]; // Segment tree root node 1 always contains the correct absolute answer
         }
 
         return answer;
     }
 
     private void build(int node, int left, int right, char[] s) {
+        length[node] = right - left + 1;
+        
         if (left == right) {
-            initLeaf(node, s[left]);
-            return;
-        }
-
-        int mid = left + (right - left) / 2;
-        int leftChild = node << 1;       // Optimized bitwise left-shift (node * 2)
-        int rightChild = leftChild | 1;   // Optimized bitwise bit-or (node * 2 + 1)
-
-        build(leftChild, left, mid, s);
-        build(rightChild, mid + 1, right, s);
-
-        merge(node, leftChild, rightChild);
-    }
-
-    private void update(int node, int left, int right, int index, char ch) {
-        if (left == right) {
-            initLeaf(node, ch);
+            leftChar[node] = s[left];
+            rightChar[node] = s[left];
+            prefix[node] = 1;
+            suffix[node] = 1;
+            max[node] = 1;
+            leafNodeMap[left] = node; // Save the exact mapped index point
             return;
         }
 
@@ -61,57 +101,34 @@ class Solution {
         int leftChild = node << 1;
         int rightChild = leftChild | 1;
 
-        if (index <= mid) {
-            update(leftChild, left, mid, index, ch);
+        build(leftChild, left, mid, s);
+        build(rightChild, mid + 1, right, s);
+
+        // Standard merge process for tree initialization
+        leftChar[node] = leftChar[leftChild];
+        rightChar[node] = rightChar[rightChild];
+
+        int aLen = length[leftChild];
+        if (prefix[leftChild] == aLen && rightChar[leftChild] == leftChar[rightChild]) {
+            prefix[node] = aLen + prefix[rightChild];
         } else {
-            update(rightChild, mid + 1, right, index, ch);
+            prefix[node] = prefix[leftChild];
         }
 
-        merge(node, leftChild, rightChild);
-    }
-
-    // Inline leaf node initialization to prevent any object/variable allocation footprint
-    private void initLeaf(int node, char c) {
-        leftChar[node] = c;
-        rightChar[node] = c;
-        prefix[node] = 1;
-        suffix[node] = 1;
-        max[node] = 1;
-        length[node] = 1;
-    }
-
-    // In-place primitive merging to avoid generating temporary object churn
-    private void merge(int parent, int a, int b) {
-        leftChar[parent] = leftChar[a];
-        rightChar[parent] = rightChar[b];
-        length[parent] = length[a] + length[b];
-
-        // Merge Prefix
-        int aLen = length[a];
-        int aPrefix = prefix[a];
-        if (aPrefix == aLen && rightChar[a] == leftChar[b]) {
-            prefix[parent] = aLen + prefix[b];
+        int bLen = length[rightChild];
+        if (suffix[rightChild] == bLen && rightChar[leftChild] == leftChar[rightChild]) {
+            suffix[node] = bLen + suffix[leftChild];
         } else {
-            prefix[parent] = aPrefix;
+            suffix[node] = suffix[rightChild];
         }
 
-        // Merge Suffix
-        int bLen = length[b];
-        int bSuffix = suffix[b];
-        if (bSuffix == bLen && rightChar[a] == leftChar[b]) {
-            suffix[parent] = bLen + suffix[a];
-        } else {
-            suffix[parent] = bSuffix;
-        }
-
-        // Merge Maximum
-        int maxVal = max[a] > max[b] ? max[a] : max[b];
-        if (rightChar[a] == leftChar[b]) {
-            int combo = suffix[a] + prefix[b];
+        int maxVal = max[leftChild] > max[rightChild] ? max[leftChild] : max[rightChild];
+        if (rightChar[leftChild] == leftChar[rightChild]) {
+            int combo = suffix[leftChild] + prefix[rightChild];
             if (combo > maxVal) {
                 maxVal = combo;
             }
         }
-        max[parent] = maxVal;
+        max[node] = maxVal;
     }
 }
