@@ -66,6 +66,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 | [2812-find-the-safest-path-in-a-grid](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/2812-find-the-safest-path-in-a-grid) |
 | [2948-make-lexicographically-smallest-array-by-swapping-elements](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/2948-make-lexicographically-smallest-array-by-swapping-elements) |
 | [2958-length-of-longest-subarray-with-at-most-k-frequency](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/2958-length-of-longest-subarray-with-at-most-k-frequency) |
+| [2967-minimum-cost-to-make-array-equalindromic](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/2967-minimum-cost-to-make-array-equalindromic) |
 | [2996-smallest-missing-integer-greater-than-sequential-prefix-sum](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/2996-smallest-missing-integer-greater-than-sequential-prefix-sum) |
 | [3069-distribute-elements-into-two-arrays-i](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/3069-distribute-elements-into-two-arrays-i) |
 | [3116-kth-smallest-amount-with-single-denomination-combination](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/3116-kth-smallest-amount-with-single-denomination-combination) |
@@ -160,6 +161,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 | [1927-sum-game](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/1927-sum-game) |
 | [1979-find-greatest-common-divisor-of-array](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/1979-find-greatest-common-divisor-of-array) |
 | [2029-stone-game-ix](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/2029-stone-game-ix) |
+| [2967-minimum-cost-to-make-array-equalindromic](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/2967-minimum-cost-to-make-array-equalindromic) |
 | [3014-minimum-number-of-pushes-to-type-word-i](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/3014-minimum-number-of-pushes-to-type-word-i) |
 | [3116-kth-smallest-amount-with-single-denomination-combination](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/3116-kth-smallest-amount-with-single-denomination-combination) |
 | [3312-sorted-gcd-pair-queries](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/3312-sorted-gcd-pair-queries) |
@@ -255,6 +257,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 | [0209-minimum-size-subarray-sum](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0209-minimum-size-subarray-sum) |
 | [0300-longest-increasing-subsequence](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0300-longest-increasing-subsequence) |
 | [2812-find-the-safest-path-in-a-grid](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/2812-find-the-safest-path-in-a-grid) |
+| [2967-minimum-cost-to-make-array-equalindromic](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/2967-minimum-cost-to-make-array-equalindromic) |
 | [3116-kth-smallest-amount-with-single-denomination-combination](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/3116-kth-smallest-amount-with-single-denomination-combination) |
 | [3312-sorted-gcd-pair-queries](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/3312-sorted-gcd-pair-queries) |
 | [3414-maximum-score-of-non-overlapping-intervals](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/3414-maximum-score-of-non-overlapping-intervals) |
@@ -338,6 +341,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 | [1927-sum-game](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/1927-sum-game) |
 | [2029-stone-game-ix](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/2029-stone-game-ix) |
 | [2091-removing-minimum-and-maximum-from-array](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/2091-removing-minimum-and-maximum-from-array) |
+| [2967-minimum-cost-to-make-array-equalindromic](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/2967-minimum-cost-to-make-array-equalindromic) |
 | [3014-minimum-number-of-pushes-to-type-word-i](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/3014-minimum-number-of-pushes-to-type-word-i) |
 | [3016-minimum-number-of-pushes-to-type-word-ii](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/3016-minimum-number-of-pushes-to-type-word-ii) |
 | [3302-find-the-lexicographically-smallest-valid-sequence](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/3302-find-the-lexicographically-smallest-valid-sequence) |
@@ -365,6 +369,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 | [1331-rank-transform-of-an-array](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/1331-rank-transform-of-an-array) |
 | [1464-maximum-product-of-two-elements-in-an-array](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/1464-maximum-product-of-two-elements-in-an-array) |
 | [2948-make-lexicographically-smallest-array-by-swapping-elements](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/2948-make-lexicographically-smallest-array-by-swapping-elements) |
+| [2967-minimum-cost-to-make-array-equalindromic](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/2967-minimum-cost-to-make-array-equalindromic) |
 | [2996-smallest-missing-integer-greater-than-sequential-prefix-sum](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/2996-smallest-missing-integer-greater-than-sequential-prefix-sum) |
 | [3016-minimum-number-of-pushes-to-type-word-ii](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/3016-minimum-number-of-pushes-to-type-word-ii) |
 | [3414-maximum-score-of-non-overlapping-intervals](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/3414-maximum-score-of-non-overlapping-intervals) |
