@@ -236,6 +236,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 | [0205-isomorphic-strings](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0205-isomorphic-strings) |
 | [0242-valid-anagram](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0242-valid-anagram) |
 | [0290-word-pattern](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0290-word-pattern) |
+| [0301-remove-invalid-parentheses](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0301-remove-invalid-parentheses) |
 | [0383-ransom-note](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0383-ransom-note) |
 | [0392-is-subsequence](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0392-is-subsequence) |
 | [0678-valid-parenthesis-string](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0678-valid-parenthesis-string) |
@@ -430,6 +431,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 ## Breadth-First Search
 |  |
 | ------- |
+| [0301-remove-invalid-parentheses](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0301-remove-invalid-parentheses) |
 | [0322-coin-change](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0322-coin-change) |
 | [1096-brace-expansion-ii](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/1096-brace-expansion-ii) |
 | [2492-minimum-score-of-a-path-between-two-cities](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/2492-minimum-score-of-a-path-between-two-cities) |
@@ -474,6 +476,7 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 | ------- |
 | [0017-letter-combinations-of-a-phone-number](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0017-letter-combinations-of-a-phone-number) |
 | [0022-generate-parentheses](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0022-generate-parentheses) |
+| [0301-remove-invalid-parentheses](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/0301-remove-invalid-parentheses) |
 | [1096-brace-expansion-ii](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/1096-brace-expansion-ii) |
 | [3348-smallest-divisible-digit-product-ii](https://github.com/PrinkleMahshwari/DSA-leetcode/tree/master/3348-smallest-divisible-digit-product-ii) |
 ## Graph Theory
