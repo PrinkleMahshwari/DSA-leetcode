@@ -30,6 +30,8 @@ class Solution {
 
             if (needed <= k) high = mid;
             else low = mid + 1;
+                
+
         }
 
         int limit = low;
